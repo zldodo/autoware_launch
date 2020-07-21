@@ -8,6 +8,7 @@
   <arg name="rviz" default="true" doc="launch rviz"/>
   <arg name="lanelet2_map_file" default="lanelet2_map.osm" />
   <arg name="pointcloud_map_file" default="pointcloud_map.pcd" />
+  <arg name="use_object_recognition" default="false" doc="if use_object_recognition:=false, /perception/object_recognition/objects topic has an empty DynamicObjectArray"/>
 
   <!-- Vehicle -->
   <include file="$(find-pkg-share vehicle_launch)/launch/vehicle.launch.xml">
@@ -42,6 +43,7 @@
   <!-- Perception -->
   <include file="$(find-pkg-share perception_launch)/launch/perception.launch.xml">
     <arg name="mode" value="lidar" doc="options: camera_lidar_fusion, lidar, camera"/>
+    <arg name="use_object_recognition" value="$(var use_object_recognition)" />
   </include>
 
   <!-- Planning -->
