@@ -63,7 +63,7 @@
     <include file="$(find-pkg-share vehicle_cmd_gate)/launch/vehicle_cmd_gate.launch.xml">
       <arg name="vehicle_param_file" value="$(var vehicle_param_file)" />
       <arg name="config_file" value="$(var vehicle_cmd_gate_param_path)"/>
-      <arg name="use_emergency_handling" value="false"/>
+      <arg name="use_emergency_handling" value="true"/>
       <arg name="use_external_emergency_stop" value="true"/>
     </include>
 
