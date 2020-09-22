@@ -39,6 +39,7 @@
       <include file="$(find-pkg-share velocity_controller)/launch/velocity_controller.launch.xml">
         <arg name="velocity_controller_param_path" value="$(var velocity_controller_param_path)"/>
         <arg name="vehicle_param_file" value="$(var vehicle_param_file)" />
+        <arg name="enable_smooth_stop" value="false" />
       </include>
 
       <!-- latlon coupler -->
