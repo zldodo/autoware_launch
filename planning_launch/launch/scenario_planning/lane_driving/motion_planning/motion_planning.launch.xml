@@ -43,7 +43,7 @@
       <arg name="vehicle_param_file" value="$(var vehicle_param_file)" />
       <arg name="acc_param_file" value="$(find-pkg-share planning_launch)/config/adaptive_cruise_control.param.yaml" />
       <arg name="param_file" value="$(find-pkg-share planning_launch)/config/obstacle_stop_planner.param.yaml" />
-      <arg name="enable_slow_down" value="false" />
+      <arg name="enable_slow_down" value="true" />
     </include>
   </group>
 
