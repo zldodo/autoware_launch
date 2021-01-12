@@ -53,7 +53,7 @@
     <remap from="input/vector_map" to="$(var map_topic_name)" />
     <remap from="output/turn_signal_cmd" to="/planning/turn_signal_decider/turn_signal_cmd" />
     <param name="lane_change_search_distance" value="30.0" />
-    <param name="intersection_search_distance" value="30.0" />
+    <param name="intersection_search_distance" value="15.0" />
     <param from="$(var vehicle_param_file)" />
   </node>
 

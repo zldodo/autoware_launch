@@ -36,9 +36,9 @@
     <param name="use_sim_time" value="$(env AW_ROS2_USE_SIM_TIME false)"/>
     <remap from="input" to="$(var output_measurement_range_sensor_points_topic)" />
     <remap from="output" to="$(var output_voxel_grid_downsample_sensor_points_topic)" />
-    <param name="voxel_size_x" value="3.0" />
-    <param name="voxel_size_y" value="3.0" />
-    <param name="voxel_size_z" value="3.0" />
+    <param name="voxel_size_x" value="1.0" />
+    <param name="voxel_size_y" value="1.0" />
+    <param name="voxel_size_z" value="1.0" />
   </node>
 
   <node pkg="pointcloud_preprocessor" exec="random_downsample_filter_node" name="random_filter" output="log">
