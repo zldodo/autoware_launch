@@ -63,5 +63,6 @@
       <arg name="vehicle_param_file" value="$(var vehicle_param_file)" />
     </include>
 
+    <include file="$(find-pkg-share sensing_launch)/launch/aip_x1/topic_state_monitor.launch.xml" />
   </group>
 </launch>

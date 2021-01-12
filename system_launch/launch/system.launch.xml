@@ -53,5 +53,10 @@
     <node pkg="autoware_version" exec="autoware_version" name="autoware_version" output="screen">
       <param name="use_sim_time" value="$(env AW_ROS2_USE_SIM_TIME false)"/>
     </node>
+
+    <!-- Topic State Monitor -->
+    <include file="$(find-pkg-share system_launch)/launch/awapi_topic_state_monitor.launch.xml" />
+    <include file="$(find-pkg-share system_launch)/launch/control_topic_state_monitor.launch.xml" />
+    <include file="$(find-pkg-share system_launch)/launch/planning_topic_state_monitor.launch.xml" />
   </group>
 </launch>
