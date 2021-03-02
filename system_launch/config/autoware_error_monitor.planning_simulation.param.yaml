@@ -31,7 +31,17 @@
             "/autoware/sensing/camera",
             "/autoware/sensing/gnss",
             "/autoware/sensing/imu",
-            "/autoware/sensing/lidar",
+            "/autoware/sensing/lidar/velodyne",
+            "/autoware/sensing/lidar/livox/connection",
+            "/autoware/sensing/lidar/livox/temperature",
+            "/autoware/sensing/lidar/livox/internal_voltage",
+            "/autoware/sensing/lidar/livox/motor_status",
+            "/autoware/sensing/lidar/livox/firmware_staus",
+            "/autoware/sensing/lidar/livox/pps_signal",
+            "/autoware/sensing/lidar/livox/service_life",
+            "/autoware/sensing/lidar/livox/fan_status",
+            "/autoware/sensing/lidar/livox/ptp_signal",
+            "/autoware/sensing/lidar/livox/time_sync",
             "/autoware/system/alive_monitoring",
             "/autoware/system/emergency_stop_operation",
             "/autoware/system/logging",
@@ -53,6 +63,7 @@
         diag_level:
           /autoware/localization/matching_score: { sf_at: "warn", lf_at: "error", spf_at: "none" }
           /autoware/sensing/gnss: { sf_at: "warn", lf_at: "error", spf_at: "none" }
+          /autoware/sensing/lidar/livox/motor_status: { sf_at: "warn", lf_at: "error", spf_at: "none" }
           /autoware/system/logging: { sf_at: "warn", lf_at: "none", spf_at: "none" }
           # /autoware/system/resource_monitoring/cpu_temperature: { sf_at: "warn", lf_at: "error", spf_at: "none" } # Not working in VMs
           # /autoware/system/resource_monitoring/cpu_usage: { sf_at: "warn", lf_at: "error", spf_at: "none" }  # No need to watch in simulation
