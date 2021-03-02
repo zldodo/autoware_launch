@@ -22,6 +22,7 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import ComposableNodeContainer, LoadComposableNodes, Node
 from launch_ros.descriptions import ComposableNode
 from launch.substitutions import EnvironmentVariable
+from launch.conditions import IfCondition
 
 
 def get_vehicle_info(context):
@@ -49,6 +50,7 @@ def get_vehicle_mirror_info(context):
 def launch_setup(context, *args, **kwargs):
 
     pkg = 'pointcloud_preprocessor'
+    use_tag_filter = IfCondition(LaunchConfiguration("use_tag_filter")).evaluate(context)
 
     vehicle_info = get_vehicle_info(context)
     vehicle_mirror_info = get_vehicle_mirror_info(context)
@@ -92,7 +94,30 @@ def launch_setup(context, *args, **kwargs):
             'ignore_tags': [1, 2],
             'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
         }],
-        condition=launch.conditions.IfCondition(LaunchConfiguration("use_tag_filter")),
+        condition=IfCondition(LaunchConfiguration("use_tag_filter")),
+    )
+
+    # set min range filter as a component
+    crop_box_min_range_component = ComposableNode(
+        package=pkg,
+        plugin='pointcloud_preprocessor::CropBoxFilterComponent',
+        name='crop_box_filter_min_range',
+        remappings=[
+            ('input', "livox/lidar" if use_tag_filter else "livox/tag_filtered/lidar"),
+            ('output', 'min_range_cropped/pointcloud'),
+        ],
+        parameters=[{
+            'input_frame': LaunchConfiguration('sensor_frame'),
+            'output_frame': LaunchConfiguration('base_frame'),
+            'min_x': 0.0,
+            'max_x': 1.5,
+            'min_y': -2.0,
+            'max_y': 2.0,
+            'min_z': -2.0,
+            'max_z': 2.0,
+            'negative': True,
+            'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
+        }]
     )
 
     # set self crop box filter as a component
@@ -101,7 +126,7 @@ def launch_setup(context, *args, **kwargs):
         plugin='pointcloud_preprocessor::CropBoxFilterComponent',
         name='self_crop_box_filter',
         remappings=[
-            ('input', 'livox/lidar'),
+            ('input', 'min_range_cropped/pointcloud'),
             ('output', 'self_cropped/pointcloud'),
         ],
         parameters=[{
@@ -148,6 +173,7 @@ def launch_setup(context, *args, **kwargs):
         package='rclcpp_components',
         executable='component_container',
         composable_node_descriptions=[
+            crop_box_min_range_component,
             cropbox_self_component,
             cropbox_mirror_component,
         ],
