@@ -19,7 +19,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import ComposableNodeContainer, LoadComposableNodes
+from launch_ros.actions import ComposableNodeContainer, LoadComposableNodes, Node
 from launch_ros.descriptions import ComposableNode
 from launch.substitutions import EnvironmentVariable
 
@@ -77,6 +77,22 @@ def launch_setup(context, *args, **kwargs):
             },
             bd_code_param,
         ]
+    )
+
+    # livox tag filter
+    livox_tag_filter_node = Node(
+        package="livox_tag_filter",
+        executable="livox_tag_filter_node",
+        output="screen",
+        remappings=[
+            ('input', 'livox/lidar'),
+            ('output', 'livox/tag_filtered/lidar'),
+        ],
+        parameters=[{
+            'ignore_tags': [1, 2],
+            'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
+        }],
+        condition=launch.conditions.IfCondition(LaunchConfiguration("use_tag_filter")),
     )
 
     # set self crop box filter as a component
@@ -147,7 +163,7 @@ def launch_setup(context, *args, **kwargs):
         condition=launch.conditions.IfCondition(LaunchConfiguration('launch_driver')),
     )
 
-    return [container, loader]
+    return [container, loader, livox_tag_filter_node]
 
 
 def generate_launch_description():
@@ -169,6 +185,7 @@ def generate_launch_description():
     add_launch_arg('launch_driver')
     add_launch_arg('base_frame', 'base_link')
     add_launch_arg('sensor_frame', 'livox_frame')
+    add_launch_arg('use_tag_filter', 'true')
     add_launch_arg('vehicle_param_file')
     add_launch_arg('vehicle_mirror_param_file')
 
