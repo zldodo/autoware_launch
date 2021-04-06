@@ -9,44 +9,32 @@
     <group>
       <push-ros-namespace namespace="system_monitor"/>
       <include file="$(find-pkg-share system_monitor)/launch/system_monitor.launch.xml">
-        <arg name="cpu_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/cpu_monitor.param.yaml"/>
-        <arg name="hdd_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/hdd_monitor.param.yaml"/>
-        <arg name="mem_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/mem_monitor.param.yaml"/>
-        <arg name="net_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/net_monitor.param.yaml"/>
-        <arg name="ntp_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/ntp_monitor.param.yaml"/>
-        <arg name="process_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/process_monitor.param.yaml"/>
-        <arg name="gpu_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/gpu_monitor.param.yaml"/>
+        <let name="cpu_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/cpu_monitor.param.yaml"/>
+        <let name="hdd_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/hdd_monitor.param.yaml"/>
+        <let name="mem_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/mem_monitor.param.yaml"/>
+        <let name="net_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/net_monitor.param.yaml"/>
+        <let name="ntp_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/ntp_monitor.param.yaml"/>
+        <let name="process_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/process_monitor.param.yaml"/>
+        <let name="gpu_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/gpu_monitor.param.yaml"/>
       </include>
     </group>
 
     <!-- State Monitor -->
-    <group if="$(eval &quot;'$(var run_mode)'=='online'&quot;)">
-      <include file="$(find-pkg-share autoware_state_monitor)/launch/autoware_state_monitor.launch.xml">
-        <arg name="config_file" value="$(find-pkg-share autoware_state_monitor)/config/autoware_state_monitor.param.yaml" />
-      </include>
-    </group>
-    <group if="$(eval &quot;'$(var run_mode)'=='planning_simulation'&quot;)">
-      <include file="$(find-pkg-share autoware_state_monitor)/launch/autoware_state_monitor.launch.xml">
-        <arg name="config_file" value="$(find-pkg-share autoware_state_monitor)/config/autoware_state_monitor.planning_simulation.param.yaml" />
-      </include>
-    </group>
+    <include file="$(find-pkg-share autoware_state_monitor)/launch/autoware_state_monitor.launch.xml">
+      <arg name="config_file" value="$(find-pkg-share autoware_state_monitor)/config/autoware_state_monitor.param.yaml" if="$(eval &quot;'$(var run_mode)'=='online'&quot;)"/>
+      <arg name="config_file" value="$(find-pkg-share autoware_state_monitor)/config/autoware_state_monitor.planning_simulation.param.yaml" if="$(eval &quot;'$(var run_mode)'=='planning_simulation'&quot;)"/>
+    </include>
 
     <!-- Error Monitor -->
-    <group if="$(eval &quot;'$(var run_mode)'=='online'&quot;)">
-      <include file="$(find-pkg-share autoware_error_monitor)/launch/autoware_error_monitor.launch.xml">
-        <arg name="config_file" value="$(find-pkg-share autoware_error_monitor)/config/autoware_error_monitor.param.yaml" />
-      </include>
-    </group>
-    <group if="$(eval &quot;'$(var run_mode)'=='planning_simulation'&quot;)">
-      <include file="$(find-pkg-share autoware_error_monitor)/launch/autoware_error_monitor.launch.xml">
-        <arg name="config_file" value="$(find-pkg-share autoware_error_monitor)/config/autoware_error_monitor.planning_simulation.param.yaml" />
-      </include>
-    </group>
+    <include file="$(find-pkg-share autoware_error_monitor)/launch/autoware_error_monitor.launch.xml">
+      <arg name="config_file" value="$(find-pkg-share autoware_error_monitor)/config/autoware_error_monitor.param.yaml" if="$(eval &quot;'$(var run_mode)'=='online'&quot;)"/>
+      <arg name="config_file" value="$(find-pkg-share autoware_error_monitor)/config/autoware_error_monitor.planning_simulation.param.yaml" if="$(eval &quot;'$(var run_mode)'=='planning_simulation'&quot;)"/>
+    </include>
 
     <!-- Emergency Handler -->
     <include file="$(find-pkg-share emergency_handler)/launch/emergency_handler.launch.xml">
-      <arg name="config_file" value="$(find-pkg-share emergency_handler)/config/emergency_handler.param.yaml" />
-      <arg name="use_emergency_hold" value="false" />
+      <let name="config_file" value="$(find-pkg-share emergency_handler)/config/emergency_handler.param.yaml" />
+      <let name="use_emergency_hold" value="false" />
     </include>
 
     <!-- Autoware Version Publisher-->
