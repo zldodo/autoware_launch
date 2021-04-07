@@ -135,12 +135,26 @@ def launch_setup(context, *args, **kwargs):
         }],
     )
 
+    livox_concat_component = ComposableNode(
+        package=pkg,
+        plugin='pointcloud_preprocessor::PointCloudConcatenateDataSynchronizerComponent',
+        name='livox_concatenate_data',
+        remappings=[('output', 'livox_concatenated/pointcloud')],
+        parameters=[{
+            'input_topics': ['/sensing/lidar/front_left/min_range_cropped/pointcloud',
+                             '/sensing/lidar/front_right/min_range_cropped/pointcloud',
+                             '/sensing/lidar/front_center/min_range_cropped/pointcloud'],
+            'output_frame': LaunchConfiguration('base_frame'),
+            'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False')
+        }]
+    )
+
     short_height_obstacle_detection_area_filter_component = ComposableNode(
         package=pkg,
         plugin='pointcloud_preprocessor::CropBoxFilterComponent',
         name='short_height_obstacle_detection_area_filter',
         remappings=[
-            ('input', 'front_center/min_range_cropped/pointcloud'),
+            ('input', 'livox_concatenated/pointcloud'),
             ('output', 'short_height_obstacle_detection_area/pointcloud'),
         ],
         parameters=[{
@@ -289,6 +303,7 @@ def launch_setup(context, *args, **kwargs):
         composable_node_descriptions=[
             cropbox_component,
             ray_ground_filter_component,
+            livox_concat_component,
             short_height_obstacle_detection_area_filter_component,
             vector_map_filter_component,
             ransac_ground_filter_component,
