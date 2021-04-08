@@ -99,13 +99,13 @@ def generate_launch_description():
         ],
         extra_arguments=[{'use_intra_process_comms': True}]
     )
-    topic_state_monitor_front_left_mirror_cropped = ComposableNode(
+    topic_state_monitor_front_left_min_range_filtered = ComposableNode(
         package='topic_state_monitor',
         plugin='topic_state_monitor::TopicStateMonitorNode',
-        name='topic_state_monitor_front_left_mirror_cropped',
+        name='topic_state_monitor_front_left_min_range_filtered',
         parameters=[
             {
-                'topic': '/sensing/lidar/front_left/mirror_cropped/pointcloud',
+                'topic': '/sensing/lidar/front_left/min_range_filtered/pointcloud',
                 'topic_type': 'sensor_msgs/msg/PointCloud2',
                 'best_effort': True,
                 'diag_name': 'sensing_topic_status',
@@ -117,13 +117,13 @@ def generate_launch_description():
         ],
         extra_arguments=[{'use_intra_process_comms': True}]
     )
-    topic_state_monitor_front_right_mirror_cropped = ComposableNode(
+    topic_state_monitor_front_right_min_range_filtered = ComposableNode(
         package='topic_state_monitor',
         plugin='topic_state_monitor::TopicStateMonitorNode',
-        name='topic_state_monitor_front_right_mirror_cropped',
+        name='topic_state_monitor_front_right_min_range_filtered',
         parameters=[
             {
-                'topic': '/sensing/lidar/front_right/mirror_cropped/pointcloud',
+                'topic': '/sensing/lidar/front_right/min_range_filtered/pointcloud',
                 'topic_type': 'sensor_msgs/msg/PointCloud2',
                 'best_effort': True,
                 'diag_name': 'sensing_topic_status',
@@ -135,13 +135,13 @@ def generate_launch_description():
         ],
         extra_arguments=[{'use_intra_process_comms': True}]
     )
-    topic_state_monitor_front_center_mirror_cropped = ComposableNode(
+    topic_state_monitor_front_center_min_range_filtered = ComposableNode(
         package='topic_state_monitor',
         plugin='topic_state_monitor::TopicStateMonitorNode',
-        name='topic_state_monitor_front_center_mirror_cropped',
+        name='topic_state_monitor_front_center_min_range_filtered',
         parameters=[
             {
-                'topic': '/sensing/lidar/front_center/mirror_cropped/pointcloud',
+                'topic': '/sensing/lidar/front_center/min_range_filtered/pointcloud',
                 'topic_type': 'sensor_msgs/msg/PointCloud2',
                 'best_effort': True,
                 'diag_name': 'sensing_topic_status',
@@ -203,9 +203,9 @@ def generate_launch_description():
             topic_state_monitor_front_left,
             topic_state_monitor_front_right,
             topic_state_monitor_top_outlier_filtered,
-            topic_state_monitor_front_left_mirror_cropped,
-            topic_state_monitor_front_right_mirror_cropped,
-            topic_state_monitor_front_center_mirror_cropped,
+            topic_state_monitor_front_left_min_range_filtered,
+            topic_state_monitor_front_right_min_range_filtered,
+            topic_state_monitor_front_center_min_range_filtered,
             topic_state_monitor_rough_no_ground,
             topic_state_monitor_short_height_no_ground
         ],
