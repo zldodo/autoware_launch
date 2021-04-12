@@ -82,10 +82,10 @@ def launch_setup(context, *args, **kwargs):
     )
 
     # livox tag filter
-    livox_tag_filter_node = Node(
+    livox_tag_filter_component = ComposableNode(
         package="livox_tag_filter",
-        executable="livox_tag_filter_node",
-        output="screen",
+        plugin='livox_tag_filter::LivoxTagFilterNode',
+        name="livox_tag_filter",
         remappings=[
             ('input', 'livox/lidar'),
             ('output', 'livox/tag_filtered/lidar'),
@@ -93,8 +93,7 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{
             'ignore_tags': [1, 2],
             'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
-        }],
-        condition=IfCondition(LaunchConfiguration("use_tag_filter")),
+        }]
     )
 
     # set min range filter as a component
@@ -183,13 +182,19 @@ def launch_setup(context, *args, **kwargs):
         }],
     )
 
-    loader = LoadComposableNodes(
+    livox_driver_loader = LoadComposableNodes(
         composable_node_descriptions=[livox_driver_component],
         target_container=container,
         condition=launch.conditions.IfCondition(LaunchConfiguration('launch_driver')),
     )
 
-    return [container, loader, livox_tag_filter_node]
+    livox_tag_filter_loader = LoadComposableNodes(
+        composable_node_descriptions=[livox_tag_filter_component],
+        target_container=container,
+        condition=IfCondition(LaunchConfiguration("use_tag_filter")),
+    )
+
+    return [container, livox_driver_loader, livox_tag_filter_loader]
 
 
 def generate_launch_description():
