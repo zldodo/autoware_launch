@@ -63,7 +63,7 @@
   <!-- Localization -->
   <group>
     <include file="$(find-pkg-share localization_launch)/launch/localization.launch.xml" if="$(var localization)">
-      <arg name="input_imu_topic" value="/sensing/imu/imu_data" />
+      <arg name="input_imu_topic" value="/sensing/lidar/front_center/livox/imu" />
     </include>
   </group>
 
