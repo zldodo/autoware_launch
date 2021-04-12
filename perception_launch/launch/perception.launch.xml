@@ -23,6 +23,7 @@
   <arg name="image_number" default="6"/>
   <arg name="use_vector_map" default="true"/>
   <arg name="use_object_recognition" default="true" />
+  <arg name="use_traffic_light_recognition" default="false" />
 
   <!-- perception module -->
   <group>
@@ -79,7 +80,7 @@
     </group>
 
     <!-- traffic light module -->
-    <group>
+    <group if="$(var use_traffic_light_recognition)">
       <push-ros-namespace namespace="traffic_light_recognition"/>
       <include file="$(find-pkg-share perception_launch)/launch/traffic_light_recognition/traffic_light.launch.xml">
       </include>
