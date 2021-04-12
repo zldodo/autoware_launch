@@ -280,24 +280,6 @@ def launch_setup(context, *args, **kwargs):
         }],
     )
 
-    relay_component = ComposableNode(
-        package='topic_tools',
-        plugin='topic_tools::RelayNode',
-        name='relay',
-        parameters=[{
-            'input_topic': '/sensing/lidar/top/outlier_filtered/pointcloud',
-            'output_topic': '/sensing/lidar/pointcloud',
-            'type': 'sensor_msgs/msg/PointCloud2',
-            'history': 'keep_last',
-            'depth': 5,
-            'reliability': 'best_effort',
-            'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False')
-        }],
-        extra_arguments=[{
-            'use_intra_process_comms': LaunchConfiguration('use_intra_process')
-        }],
-    )
-
     # set container to run all required components in the same process
     container = ComposableNodeContainer(
         name='pointcloud_preprocessor_container',
@@ -311,8 +293,7 @@ def launch_setup(context, *args, **kwargs):
             vector_map_filter_component,
             ransac_ground_filter_component,
             concat_no_ground_component,
-            voxel_grid_filter_component,
-            relay_component,
+            voxel_grid_filter_component
         ],
         output='screen',
         parameters=[{

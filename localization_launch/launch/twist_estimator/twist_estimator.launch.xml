@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="input_imu_topic" default="/sensing/imu/imu_data" />
   <include file="$(find-pkg-share gyro_odometer)/launch/gyro_odometer.launch.xml">
+    <arg name="input_imu_topic" value="$(var input_imu_topic)" />
     <arg name="output_twist_topic" value="/localization/twist_estimator/twist" description="" />
     <arg name="output_twist_with_covariance_topic" value="/localization/twist_estimator/twist_with_covariance" description="" />
   </include>

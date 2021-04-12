@@ -63,6 +63,7 @@
   <!-- Localization -->
   <group>
     <include file="$(find-pkg-share localization_launch)/launch/localization.launch.xml" if="$(var localization)">
+      <arg name="input_imu_topic" value="/sensing/imu/imu_data" />
     </include>
   </group>
 
