@@ -65,6 +65,6 @@
       <arg name="use_multithread" value="false" />
     </include>
 
-    <include file="$(find-pkg-share sensing_launch)/launch/aip_x1/topic_state_monitor.launch.xml" />
+    <include file="$(find-pkg-share sensing_launch)/launch/aip_x1/topic_state_monitor.launch.py" />
   </group>
 </launch>
