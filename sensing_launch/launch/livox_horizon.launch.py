@@ -40,20 +40,12 @@ def get_vehicle_info(context):
     return p
 
 
-def get_vehicle_mirror_info(context):
-    path = LaunchConfiguration('vehicle_mirror_param_file').perform(context)
-    with open(path, 'r') as f:
-        p = yaml.safe_load(f)['/**']['ros__parameters']
-    return p
-
-
 def launch_setup(context, *args, **kwargs):
 
     pkg = 'pointcloud_preprocessor'
     use_tag_filter = IfCondition(LaunchConfiguration("use_tag_filter")).evaluate(context)
 
     vehicle_info = get_vehicle_info(context)
-    vehicle_mirror_info = get_vehicle_mirror_info(context)
 
     bd_code_param_path = LaunchConfiguration('bd_code_param_path').perform(context)
     with open(bd_code_param_path, 'r') as f:
@@ -119,52 +111,6 @@ def launch_setup(context, *args, **kwargs):
         }]
     )
 
-    # set self crop box filter as a component
-    cropbox_self_component = ComposableNode(
-        package=pkg,
-        plugin='pointcloud_preprocessor::CropBoxFilterComponent',
-        name='self_crop_box_filter',
-        remappings=[
-            ('input', 'min_range_cropped/pointcloud'),
-            ('output', 'self_cropped/pointcloud'),
-        ],
-        parameters=[{
-            'input_frame': LaunchConfiguration('base_frame'),
-            'output_frame': LaunchConfiguration('base_frame'),
-            'min_x': vehicle_info['min_longitudinal_offset'],
-            'max_x': vehicle_info['max_longitudinal_offset'],
-            'min_y': vehicle_info['min_lateral_offset'],
-            'max_y': vehicle_info['max_lateral_offset'],
-            'min_z': vehicle_info['min_height_offset'],
-            'max_z': vehicle_info['max_height_offset'],
-            'negative': True,
-            'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
-        }]
-    )
-
-    # set mirror crop box filter as a component
-    cropbox_mirror_component = ComposableNode(
-        package=pkg,
-        plugin='pointcloud_preprocessor::CropBoxFilterComponent',
-        name='mirror_crop_box_filter',
-        remappings=[
-            ('input', 'self_cropped/pointcloud'),
-            ('output', 'mirror_cropped/pointcloud'),
-        ],
-        parameters=[{
-            'input_frame': LaunchConfiguration('base_frame'),
-            'output_frame': LaunchConfiguration('base_frame'),
-            'min_x': vehicle_mirror_info['min_longitudinal_offset'],
-            'max_x': vehicle_mirror_info['max_longitudinal_offset'],
-            'min_y': vehicle_mirror_info['min_lateral_offset'],
-            'max_y': vehicle_mirror_info['max_lateral_offset'],
-            'min_z': vehicle_mirror_info['min_height_offset'],
-            'max_z': vehicle_mirror_info['max_height_offset'],
-            'negative': True,
-            'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
-        }]
-    )
-
     # set container to run all required components in the same process
     container = ComposableNodeContainer(
         name='pointcloud_preprocessor_container',
@@ -173,8 +119,6 @@ def launch_setup(context, *args, **kwargs):
         executable='component_container',
         composable_node_descriptions=[
             crop_box_min_range_component,
-            cropbox_self_component,
-            cropbox_mirror_component,
         ],
         output='screen',
         parameters=[{

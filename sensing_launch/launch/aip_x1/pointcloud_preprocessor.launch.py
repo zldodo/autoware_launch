@@ -37,13 +37,6 @@ def get_vehicle_info(context):
     return p
 
 
-def get_vehicle_mirror_info(context):
-    path = LaunchConfiguration('vehicle_mirror_param_file').perform(context)
-    with open(path, 'r') as f:
-        p = yaml.safe_load(f)['/**']['ros__parameters']
-    return p
-
-
 def launch_setup(context, *args, **kwargs):
 
     pkg = 'pointcloud_preprocessor'
@@ -58,9 +51,9 @@ def launch_setup(context, *args, **kwargs):
         remappings=[('output', 'concatenated/pointcloud')],
         parameters=[{
             'input_topics': ['/sensing/lidar/top/outlier_filtered/pointcloud',
-                             '/sensing/lidar/front_left/mirror_cropped/pointcloud',
-                             '/sensing/lidar/front_right/mirror_cropped/pointcloud',
-                             '/sensing/lidar/front_center/mirror_cropped/pointcloud'],
+                             '/sensing/lidar/front_left/min_range_cropped/pointcloud',
+                             '/sensing/lidar/front_right/min_range_cropped/pointcloud',
+                             '/sensing/lidar/front_center/min_range_cropped/pointcloud'],
             'output_frame': LaunchConfiguration('base_frame'),
             'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False')
         }],
@@ -147,7 +140,7 @@ def launch_setup(context, *args, **kwargs):
         plugin='pointcloud_preprocessor::CropBoxFilterComponent',
         name='short_height_obstacle_detection_area_filter',
         remappings=[
-            ('input', 'front_center/mirror_cropped/pointcloud'),
+            ('input', 'front_center/min_range_cropped/pointcloud'),
             ('output', 'short_height_obstacle_detection_area/pointcloud'),
         ],
         parameters=[{

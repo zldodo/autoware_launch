@@ -36,14 +36,6 @@ def get_vehicle_info(context):
     p['max_height_offset'] = p['vehicle_height']
     return p
 
-
-def get_vehicle_mirror_info(context):
-    path = LaunchConfiguration('vehicle_mirror_param_file').perform(context)
-    with open(path, 'r') as f:
-        p = yaml.safe_load(f)['/**']['ros__parameters']
-    return p
-
-
 def launch_setup(context, *args, **kwargs):
 
     def create_parameter_dict(*args):
@@ -101,34 +93,12 @@ def launch_setup(context, *args, **kwargs):
     )
     )
 
-    mirror_info = get_vehicle_mirror_info(context)
-    cropbox_parameters['min_x'] = mirror_info['min_longitudinal_offset']
-    cropbox_parameters['max_x'] = mirror_info['max_longitudinal_offset']
-    cropbox_parameters['min_y'] = mirror_info['min_lateral_offset']
-    cropbox_parameters['max_y'] = mirror_info['max_lateral_offset']
-    cropbox_parameters['min_z'] = mirror_info['min_height_offset']
-    cropbox_parameters['max_z'] = mirror_info['max_height_offset']
-
-    nodes.append(ComposableNode(
-        package='pointcloud_preprocessor',
-        plugin='pointcloud_preprocessor::CropBoxFilterComponent',
-        name='crop_box_filter_mirror',
-        remappings=[('input', 'self_cropped/pointcloud_ex'),
-                    ('output', 'mirror_cropped/pointcloud_ex'),
-                    ],
-        parameters=[cropbox_parameters],
-        extra_arguments=[{
-            'use_intra_process_comms': LaunchConfiguration('use_intra_process')
-        }],
-    )
-    )
-
     nodes.append(ComposableNode(
         package='velodyne_pointcloud',
         plugin='velodyne_pointcloud::Interpolate',
         name='velodyne_interpolate_node',
         remappings=[
-            ('velodyne_points_ex', 'mirror_cropped/pointcloud_ex'),
+            ('velodyne_points_ex', 'self_cropped/pointcloud_ex'),
             ('velodyne_points_interpolate', 'rectified/pointcloud'),
             ('velodyne_points_interpolate_ex', 'rectified/pointcloud_ex'),
         ],
