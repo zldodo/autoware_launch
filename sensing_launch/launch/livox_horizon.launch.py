@@ -70,7 +70,10 @@ def launch_setup(context, *args, **kwargs):
                                                     default_value='False'),
             },
             bd_code_param,
-        ]
+        ],
+        extra_arguments=[{
+            'use_intra_process_comms': True
+        }],
     )
 
     # livox tag filter
@@ -85,7 +88,10 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{
             'ignore_tags': [1, 2],
             'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
-        }]
+        }],
+        extra_arguments=[{
+            'use_intra_process_comms': True
+        }],
     )
 
     # set min range filter as a component
@@ -108,7 +114,10 @@ def launch_setup(context, *args, **kwargs):
             'max_z': 2.0,
             'negative': True,
             'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
-        }]
+        }],
+        extra_arguments=[{
+            'use_intra_process_comms': True
+        }],
     )
 
     # set container to run all required components in the same process
