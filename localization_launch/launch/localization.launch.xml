@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="input_imu_topic" default="/sensing/imu/imu_data" />
   <!-- localization module -->
   <group>
     <push-ros-namespace namespace="localization"/>
@@ -19,6 +20,7 @@
     <group>
       <push-ros-namespace namespace="twist_estimator"/>
       <include file="$(find-pkg-share localization_launch)/launch/twist_estimator/twist_estimator.launch.xml">
+        <arg name="input_imu_topic" value="$(var input_imu_topic)" />
       </include>
     </group>
     <!-- pose_twist_fusion_filter module -->
