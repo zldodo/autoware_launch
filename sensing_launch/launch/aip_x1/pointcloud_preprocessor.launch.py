@@ -188,8 +188,9 @@ def launch_setup(context, *args, **kwargs):
             'voxel_size_y': 0.25,
             'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False')
         }],
+        # cannot use intra process because vector map filter uses transient local.
         extra_arguments=[{
-            'use_intra_process_comms': LaunchConfiguration('use_intra_process')
+            'use_intra_process_comms': False
         }],
     )
 
