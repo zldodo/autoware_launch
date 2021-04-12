@@ -67,7 +67,7 @@
   </node>
 
   <!-- Web Controller -->
-  <include file="$(find-pkg-share autoware_web_controller)/launch/autoware_web_controller.launch.xml" />
+  <!-- <include file="$(find-pkg-share autoware_web_controller)/launch/autoware_web_controller.launch.xml" /> -->
 
   <!-- Clock Publisher For Rosbag -->
   <!-- TODO(mitsudome-r): remove this after ROSBAG2 can automatically record clock -->
