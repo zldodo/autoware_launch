@@ -40,50 +40,15 @@ def get_vehicle_info(context):
     return p
 
 
-def launch_setup(context, *args, **kwargs):
-
-    pkg = 'pointcloud_preprocessor'
-    use_tag_filter = IfCondition(LaunchConfiguration("use_tag_filter")).evaluate(context)
-
-    vehicle_info = get_vehicle_info(context)
-
-    bd_code_param_path = LaunchConfiguration('bd_code_param_path').perform(context)
-    with open(bd_code_param_path, 'r') as f:
-        bd_code_param = yaml.safe_load(f)['/**']['ros__parameters']
-
-    # livox driver
-    livox_driver_component = ComposableNode(
-        package='livox_ros2_driver',
-        plugin='livox_ros::LivoxDriver',
-        name='livox_driver',
-        parameters=[
-            {
-                'xfe_format': LaunchConfiguration('xfe_format'),
-                'multi_topic': LaunchConfiguration('multi_topic'),
-                'data_src': LaunchConfiguration('data_src'),
-                'publish_freq': LaunchConfiguration('publish_freq'),
-                'output_data_type': LaunchConfiguration('output_type'),
-                'lvx_file_path': LaunchConfiguration('lvx_file_path'),
-                'user_config_path': LaunchConfiguration('user_config_path'),
-                'frame_id': LaunchConfiguration('sensor_frame'),
-                'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME',
-                                                    default_value='False'),
-            },
-            bd_code_param,
-        ],
-        extra_arguments=[{
-            'use_intra_process_comms': True
-        }],
-    )
-
+def get_livox_tag_filter_component(ns):
     # livox tag filter
     livox_tag_filter_component = ComposableNode(
         package="livox_tag_filter",
         plugin='livox_tag_filter::LivoxTagFilterNode',
-        name="livox_tag_filter",
+        name= ns + "_livox_tag_filter",
         remappings=[
-            ('input', 'livox/lidar'),
-            ('output', 'livox/tag_filtered/lidar'),
+            ('input', ns + '/livox/lidar'),
+            ('output', ns + '/livox/tag_filtered/lidar'),
         ],
         parameters=[{
             'ignore_tags': [1, 2],
@@ -93,18 +58,21 @@ def launch_setup(context, *args, **kwargs):
             'use_intra_process_comms': True
         }],
     )
+    return livox_tag_filter_component
 
-    # set min range filter as a component
+
+def get_crop_box_min_range_component(ns, context):
+    use_tag_filter = IfCondition(LaunchConfiguration("use_tag_filter")).evaluate(context)
     crop_box_min_range_component = ComposableNode(
-        package=pkg,
+        package='pointcloud_preprocessor',
         plugin='pointcloud_preprocessor::CropBoxFilterComponent',
-        name='crop_box_filter_min_range',
+        name= ns + '_crop_box_filter_min_range',
         remappings=[
-            ('input', "livox/lidar" if use_tag_filter else "livox/tag_filtered/lidar"),
-            ('output', 'min_range_cropped/pointcloud'),
+            ('input', ns + "/livox/lidar" if use_tag_filter else ns + "/livox/tag_filtered/lidar"),
+            ('output', ns + '/min_range_cropped/pointcloud'),
         ],
         parameters=[{
-            'input_frame': LaunchConfiguration('sensor_frame'),
+            'input_frame': "livox_" + ns,
             'output_frame': LaunchConfiguration('base_frame'),
             'min_x': 0.0,
             'max_x': 1.5,
@@ -119,15 +87,49 @@ def launch_setup(context, *args, **kwargs):
             'use_intra_process_comms': True
         }],
     )
+    return crop_box_min_range_component
 
-    # set container to run all required components in the same process
+def launch_setup(context, *args, **kwargs):
+    livox_config_path = os.path.join(get_package_share_directory("individual_params"), "config",
+                EnvironmentVariable(name='VEHICLE_ID', default_value='default').perform(context),
+                "aip_x1", "livox_lidar_config.json")
+
+    # livox driver
+    livox_driver_component = ComposableNode(
+        package='livox_ros2_driver',
+        plugin='livox_ros::LivoxDriver',
+        name='livox_driver',
+        parameters=[
+            {
+                'xfe_format': LaunchConfiguration('xfe_format'),
+                'multi_topic': LaunchConfiguration('multi_topic'),
+                'data_src': LaunchConfiguration('data_src'),
+                'publish_freq': LaunchConfiguration('publish_freq'),
+                'output_data_type': LaunchConfiguration('output_type'),
+                'lvx_file_path': LaunchConfiguration('lvx_file_path'),
+                'user_config_path': livox_config_path,
+                'frame_id': LaunchConfiguration('sensor_frame'),
+                'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME',
+                                                    default_value='False'),
+            },
+        ],
+        extra_arguments=[{
+            'use_intra_process_comms': True
+        }],
+    )
+
+    front_left_crop_box_min_range_component = get_crop_box_min_range_component("front_left", context)
+    front_center_crop_box_min_range_component = get_crop_box_min_range_component("front_center", context)
+    front_right_crop_box_min_range_component = get_crop_box_min_range_component("front_right", context)
     container = ComposableNodeContainer(
         name='pointcloud_preprocessor_container',
-        namespace='pointcloud_preprocessor',
+        namespace='livox_pointcloud_preprocessor',
         package='rclcpp_components',
         executable='component_container',
         composable_node_descriptions=[
-            crop_box_min_range_component,
+            front_left_crop_box_min_range_component,
+            front_center_crop_box_min_range_component,
+            front_right_crop_box_min_range_component,
         ],
         output='screen',
         parameters=[{
@@ -138,11 +140,17 @@ def launch_setup(context, *args, **kwargs):
     livox_driver_loader = LoadComposableNodes(
         composable_node_descriptions=[livox_driver_component],
         target_container=container,
-        condition=launch.conditions.IfCondition(LaunchConfiguration('launch_driver')),
+        condition=IfCondition(LaunchConfiguration('launch_driver')),
     )
 
+    front_left_livox_tag_filter_component = get_livox_tag_filter_component("front_left")
+    front_center_livox_tag_filter_component = get_livox_tag_filter_component("front_center")
+    front_right_livox_tag_filter_component = get_livox_tag_filter_component("front_right")
     livox_tag_filter_loader = LoadComposableNodes(
-        composable_node_descriptions=[livox_tag_filter_component],
+        composable_node_descriptions=[
+            front_left_livox_tag_filter_component,
+            front_center_livox_tag_filter_component,
+            front_right_livox_tag_filter_component],
         target_container=container,
         condition=IfCondition(LaunchConfiguration("use_tag_filter")),
     )
@@ -158,14 +166,11 @@ def generate_launch_description():
         launch_arguments.append(DeclareLaunchArgument(name, default_value=default_value))
 
     add_launch_arg('xfe_format', '0')
-    add_launch_arg('multi_topic', '0')
+    add_launch_arg('multi_topic', '1')
     add_launch_arg('data_src', '0')
     add_launch_arg('publish_freq', '10.0')
     add_launch_arg('output_type', '0')
     add_launch_arg('lvx_file_path', 'livox_test.lvx')
-    add_launch_arg('user_config_path', os.path.join(get_package_share_directory(
-        "livox_ros2_driver"), "config/livox_lidar_config.json"))
-    add_launch_arg('bd_code_param_path')
     add_launch_arg('launch_driver')
     add_launch_arg('base_frame', 'base_link')
     add_launch_arg('sensor_frame', 'livox_frame')
