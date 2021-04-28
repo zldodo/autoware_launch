@@ -40,7 +40,7 @@
             "/autoware/sensing/lidar/livox/pps_signal",
             "/autoware/sensing/lidar/livox/service_life",
             "/autoware/sensing/lidar/livox/fan_status",
-            "/autoware/sensing/lidar/livox/ptp_signal",
+            # "/autoware/sensing/lidar/livox/ptp_signal",
             "/autoware/sensing/lidar/livox/time_sync",
             "/autoware/system/alive_monitoring",
             "/autoware/system/emergency_stop_operation",
