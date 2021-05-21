@@ -51,7 +51,7 @@ def get_livox_tag_filter_component(ns):
             ('output', ns + '/livox/tag_filtered/lidar'),
         ],
         parameters=[{
-            'ignore_tags': [1, 2],
+            'ignore_tags': [1, 2, 20, 21, 22, 23, 24],
             'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
         }],
         extra_arguments=[{
