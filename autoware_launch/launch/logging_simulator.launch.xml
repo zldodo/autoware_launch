@@ -22,6 +22,12 @@
   <set_env name="AW_ROS2_USE_SIM_TIME" value="true" />
   <arg name="use_object_recognition" default="false" doc="if use_object_recognition:=false, /perception/object_recognition/objects topic has an empty DynamicObjectArray"/>
 
+  <!-- Global parameters -->
+  <!-- Vehicle info -->
+  <include file="$(find-pkg-share vehicle_launch)/launch/vehicle_info.launch.py">
+    <arg name="config_file" value="$(find-pkg-share $(var vehicle_model)_description)/config/vehicle_info.param.yaml"/>
+  </include>
+
   <!-- Vehicle -->
   <group>
     <include file="$(find-pkg-share vehicle_launch)/launch/vehicle_description.launch.xml" if="$(var vehicle)">
@@ -29,10 +35,6 @@
       <arg name="sensor_model" value="$(var sensor_model)"/>
       <arg name="vehicle_id" value="$(var vehicle_id)"/>
       <arg name="vehicle_param_file" value="$(find-pkg-share $(var vehicle_model)_description)/config/vehicle_info.param.yaml"/>
-    </include>
-
-    <include file="$(find-pkg-share vehicle_info_param_server)/launch/vehicle_info_param_server.launch.xml">
-      <arg name="config_file" value="$(find-pkg-share $(var vehicle_model)_description)/config/vehicle_info.param.yaml"/>
     </include>
   </group>
 
