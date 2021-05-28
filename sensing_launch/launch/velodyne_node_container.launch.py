@@ -13,12 +13,15 @@
 # limitations under the License.
 
 import launch
-from launch.actions import DeclareLaunchArgument, OpaqueFunction, SetLaunchConfiguration
-from launch.conditions import IfCondition, UnlessCondition
-from launch.substitutions import EnvironmentVariable, LaunchConfiguration
-from launch_ros.actions import ComposableNodeContainer, LoadComposableNodes
+from launch.actions import DeclareLaunchArgument
+from launch.actions import OpaqueFunction
+from launch.actions import SetLaunchConfiguration
+from launch.conditions import IfCondition
+from launch.conditions import UnlessCondition
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import ComposableNodeContainer
+from launch_ros.actions import LoadComposableNodes
 from launch_ros.descriptions import ComposableNode
-
 import yaml
 
 
@@ -56,9 +59,7 @@ def launch_setup(context, *args, **kwargs):
                                              'num_points_thresholds',
                                              'invalid_intensity',
                                              'frame_id', 'scan_phase'),
-                     'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME',
-                                                         default_value='False'),
-        }],
+                     }],
         remappings=[('velodyne_points', 'pointcloud_raw'),
                     ('velodyne_points_ex', 'pointcloud_raw_ex')],
         extra_arguments=[{
@@ -69,8 +70,6 @@ def launch_setup(context, *args, **kwargs):
 
     cropbox_parameters = create_parameter_dict('input_frame', 'output_frame')
     cropbox_parameters['negative'] = True
-    cropbox_parameters['use_sim_time'] = EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME',
-                                                             default_value='False')
 
     vehicle_info = get_vehicle_info(context)
     cropbox_parameters['min_x'] = vehicle_info['min_longitudinal_offset']
@@ -103,9 +102,6 @@ def launch_setup(context, *args, **kwargs):
             ('velodyne_points_interpolate', 'rectified/pointcloud'),
             ('velodyne_points_interpolate_ex', 'rectified/pointcloud_ex'),
         ],
-        parameters=[{
-            'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
-        }],
         extra_arguments=[{
             'use_intra_process_comms': LaunchConfiguration('use_intra_process')
         }],
@@ -120,9 +116,6 @@ def launch_setup(context, *args, **kwargs):
             ('input', 'rectified/pointcloud_ex'),
             ('output', 'outlier_filtered/pointcloud')
         ],
-        parameters=[{
-            'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
-        }],
         extra_arguments=[{
             'use_intra_process_comms': LaunchConfiguration('use_intra_process')
         }],
@@ -137,9 +130,6 @@ def launch_setup(context, *args, **kwargs):
         package='rclcpp_components',
         executable=LaunchConfiguration('container_executable'),
         composable_node_descriptions=nodes,
-        parameters=[{
-            'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
-        }],
     )
 
     driver_component = ComposableNode(
@@ -150,8 +140,6 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{**create_parameter_dict('device_ip', 'gps_time', 'read_once', 'read_fast',
                                              'repeat_delay', 'frame_id', 'model', 'rpm', 'port',
                                              'pcap', 'scan_phase'),
-                     'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME',
-                                                         default_value='False'),
                      }],
     )
 

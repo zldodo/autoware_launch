@@ -13,16 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-import yaml
 
 import launch
-from launch.actions import DeclareLaunchArgument, OpaqueFunction, SetLaunchConfiguration
-from launch.conditions import IfCondition, UnlessCondition
+from launch.actions import DeclareLaunchArgument
+from launch.actions import OpaqueFunction
+from launch.actions import SetLaunchConfiguration
+from launch.conditions import IfCondition
+from launch.conditions import UnlessCondition
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import ComposableNodeContainer, LoadComposableNodes
+from launch_ros.actions import ComposableNodeContainer
+from launch_ros.actions import LoadComposableNodes
 from launch_ros.descriptions import ComposableNode
-from launch.substitutions import EnvironmentVariable
+import yaml
+
 
 def get_vehicle_info(context):
     path = LaunchConfiguration('vehicle_param_file').perform(context)
@@ -37,6 +40,7 @@ def get_vehicle_info(context):
     p['min_height_offset'] = 0.0
     p['max_height_offset'] = p['vehicle_height']
     return p
+
 
 def get_vehicle_mirror_info(context):
     path = LaunchConfiguration('vehicle_mirror_param_file').perform(context)
@@ -62,7 +66,6 @@ def launch_setup(context, *args, **kwargs):
                              '/sensing/lidar/left/outlier_filtered/pointcloud',
                              '/sensing/lidar/right/outlier_filtered/pointcloud'],
             'output_frame': LaunchConfiguration('base_frame'),
-            'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
         }],
         extra_arguments=[{
             'use_intra_process_comms': LaunchConfiguration('use_intra_process')
@@ -81,7 +84,6 @@ def launch_setup(context, *args, **kwargs):
             'output_frame': LaunchConfiguration('base_frame'),
             'min_z': vehicle_info['min_height_offset'],
             'max_z': vehicle_info['max_height_offset'],
-            'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
         }],
         extra_arguments=[{
             'use_intra_process_comms': LaunchConfiguration('use_intra_process')
@@ -107,7 +109,6 @@ def launch_setup(context, *args, **kwargs):
             'min_z': vehicle_info['min_height_offset'],
             'max_z': vehicle_info['max_height_offset'],
             'negative': False,
-            'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
         }],
         extra_arguments=[{
             'use_intra_process_comms': LaunchConfiguration('use_intra_process')
@@ -123,10 +124,9 @@ def launch_setup(context, *args, **kwargs):
             ('output', 'no_ground/pointcloud')
         ],
         parameters=[{
-            "general_max_slope": 10.0,
-            "local_max_slope": 10.0,
-            "min_height_threshold": 0.2,
-            'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
+            'general_max_slope': 10.0,
+            'local_max_slope': 10.0,
+            'min_height_threshold': 0.2,
         }],
         extra_arguments=[{
             'use_intra_process_comms': LaunchConfiguration('use_intra_process')
@@ -144,9 +144,6 @@ def launch_setup(context, *args, **kwargs):
             ground_component,
         ],
         output='screen',
-        parameters=[{
-            'use_sim_time': EnvironmentVariable(name='AW_ROS2_USE_SIM_TIME', default_value='False'),
-        }],
     )
 
     # load concat or passthrough filter
@@ -163,6 +160,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     return [container, concat_loader, passthrough_loader]
+
 
 def generate_launch_description():
 

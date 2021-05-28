@@ -13,15 +13,19 @@
 # limitations under the License.
 
 import launch
-from launch.actions import DeclareLaunchArgument, GroupAction,\
-    OpaqueFunction, SetLaunchConfiguration
-from launch.conditions import IfCondition, LaunchConfigurationEquals, UnlessCondition
+from launch.actions import DeclareLaunchArgument
+from launch.actions import GroupAction
+from launch.actions import OpaqueFunction
+from launch.actions import SetLaunchConfiguration
+from launch.conditions import IfCondition
+from launch.conditions import LaunchConfigurationEquals
+from launch.conditions import UnlessCondition
 from launch.substitutions import LaunchConfiguration
-
-from launch_ros.actions import ComposableNodeContainer, LoadComposableNodes, PushRosNamespace
+from launch_ros.actions import ComposableNodeContainer
+from launch_ros.actions import LoadComposableNodes
+from launch_ros.actions import PushRosNamespace
 from launch_ros.descriptions import ComposableNode
 from launch_ros.substitutions import FindPackageShare
-
 import yaml
 
 
@@ -177,11 +181,11 @@ def launch_setup(context, *args, **kwargs):
             ('input/auto/turn_signal_cmd', '/planning/turn_signal_decider/turn_signal_cmd'),
             ('input/auto/shift_cmd', '/control/shift_decider/shift_cmd'),
 
-            ('input/remote/control_cmd', '/remote/control_cmd'),
-            ('input/remote/turn_signal_cmd', '/remote/turn_signal_cmd'),
-            ('input/remote/shift_cmd', '/remote/shift_cmd'),
+            ('input/remote/control_cmd', '/external/external_cmd_selector/control_cmd'),
+            ('input/remote/turn_signal_cmd', '/external/external_cmd_selector/turn_signal_cmd'),
+            ('input/remote/shift_cmd', '/external/external_cmd_selector/shift_cmd'),
 
-            ('input/emergency/control_cmd', 'input/emergency/control_cmd'),
+            ('input/emergency/control_cmd', '/system/emergency/control_cmd'),
             ('input/emergency/turn_signal_cmd', '/system/emergency/turn_signal_cmd'),
             ('input/emergency/shift_cmd', '/system/emergency/shift_cmd'),
 
@@ -206,18 +210,46 @@ def launch_setup(context, *args, **kwargs):
         }],
     )
 
+    # external cmd selector
+    external_cmd_selector_component = ComposableNode(
+        package='external_cmd_selector',
+        plugin='ExternalCmdSelector',
+        name='external_cmd_selector',
+        remappings=[
+            ('~/input/local/raw_control_cmd', '/external/local/raw_control_cmd'),
+            ('~/input/local/shift_cmd', '/external/local/shift_cmd'),
+            ('~/input/local/turn_signal_cmd', '/external/local/turn_signal_cmd'),
+            ('~/input/remote/raw_control_cmd', '/external/remote/raw_control_cmd'),
+            ('~/input/remote/shift_cmd', '/external/remote/shift_cmd'),
+            ('~/input/remote/turn_signal_cmd', '/external/remote/turn_signal_cmd'),
+            ('~/output/current_selector_mode', '~/current_selector_mode'),
+            ('~/output/raw_control_cmd', '/external/external_cmd_selector/raw_control_cmd'),
+            ('~/output/shift_cmd', '/external/external_cmd_selector/shift_cmd'),
+            ('~/output/turn_signal_cmd', '/external/external_cmd_selector/turn_signal_cmd'),
+            ('~/service/select_external_command', '~/select_external_command'),
+        ],
+        parameters=[
+            {
+                'initial_selector_mode': LaunchConfiguration('initial_selector_mode'),
+            }
+        ],
+        extra_arguments=[{
+            'use_intra_process_comms': LaunchConfiguration('use_intra_process')
+        }],
+    )
+
     # remote cmd converter
     remote_cmd_converter_component = ComposableNode(
         package='remote_cmd_converter',
         plugin='RemoteCmdConverter',
         name='remote_cmd_converter',
         remappings=[
-            ('in/raw_control_cmd', '/remote/raw_control_cmd'),
-            ('in/shift_cmd', '/remote/shift_cmd'),
+            ('in/raw_control_cmd', '/external/external_cmd_selector/raw_control_cmd'),
+            ('in/shift_cmd', '/external/external_cmd_selector/shift_cmd'),
             ('in/emergency_stop', '/remote/emergency_stop'),
             ('in/current_gate_mode', '/control/current_gate_mode'),
             ('in/twist', '/localization/twist'),
-            ('out/control_cmd', '/remote/control_cmd'),
+            ('out/control_cmd', '/external/external_cmd_selector/control_cmd'),
             ('out/latest_raw_control_cmd', '/remote/latest_raw_control_cmd'),
         ],
         parameters=[
@@ -247,7 +279,9 @@ def launch_setup(context, *args, **kwargs):
             latlon_muxer_component,
             lane_departure_component,
             shift_decider_component,
-            vehicle_cmd_gate_component
+            vehicle_cmd_gate_component,
+            remote_cmd_converter_component,
+            external_cmd_selector_component,
         ],
     )
 
@@ -322,6 +356,9 @@ def generate_launch_description():
     add_launch_arg('use_emergency_handling', 'true')
     add_launch_arg('use_external_emergency_stop', 'true')
 
+    # external cmd selector
+    add_launch_arg('initial_selector_mode', '1')
+
     # remote cmd converter
     add_launch_arg(
         'csv_path_accel_map',
@@ -355,10 +392,12 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('use_multithread'))
     )
     return launch.LaunchDescription(
-            launch_arguments +
-            [set_container_executable,
-            set_container_mt_executable] +
-            [
-                OpaqueFunction(function=launch_setup)
-            ]
+        launch_arguments +
+        [
+            set_container_executable,
+            set_container_mt_executable,
+        ] +
+        [
+            OpaqueFunction(function=launch_setup)
+        ]
     )
