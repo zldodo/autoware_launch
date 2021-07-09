@@ -59,6 +59,7 @@ def launch_setup(context, *args, **kwargs):
                              '/sensing/lidar/front_right/min_range_cropped/pointcloud',
                              '/sensing/lidar/front_center/min_range_cropped/pointcloud'],
             'output_frame': LaunchConfiguration('base_frame'),
+            'timeout_sec': 1.0
         }],
         extra_arguments=[{
             'use_intra_process_comms': LaunchConfiguration('use_intra_process')
@@ -145,6 +146,7 @@ def launch_setup(context, *args, **kwargs):
                              '/sensing/lidar/front_right/min_range_cropped/pointcloud',
                              '/sensing/lidar/front_center/min_range_cropped/pointcloud'],
             'output_frame': LaunchConfiguration('base_frame'),
+            'timeout_sec': 1.0
         }]
     )
 
@@ -225,6 +227,7 @@ def launch_setup(context, *args, **kwargs):
             'input_topics': ['/sensing/lidar/rough/no_ground/pointcloud',
                              '/sensing/lidar/short_height/no_ground/pointcloud'],
             'output_frame': LaunchConfiguration('base_frame'),
+            'timeout_sec': 1.0
         }],
         extra_arguments=[{
             'use_intra_process_comms': LaunchConfiguration('use_intra_process')
