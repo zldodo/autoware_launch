@@ -70,7 +70,7 @@ def get_crop_box_min_range_component(ns, context):
         plugin='pointcloud_preprocessor::CropBoxFilterComponent',
         name=ns + '_crop_box_filter_min_range',
         remappings=[
-            ('input', ns + '/livox/lidar' if use_tag_filter else ns + '/livox/tag_filtered/lidar'),
+            ('input', ns + '/livox/tag_filtered/lidar' if use_tag_filter else ns + '/livox/lidar'),
             ('output', ns + '/min_range_cropped/pointcloud'),
         ],
         parameters=[{
