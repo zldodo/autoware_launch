@@ -39,6 +39,7 @@ def get_vehicle_info(context):
     p['max_height_offset'] = p['vehicle_height']
     return p
 
+
 def launch_setup(context, *args, **kwargs):
 
     def create_parameter_dict(*args):
