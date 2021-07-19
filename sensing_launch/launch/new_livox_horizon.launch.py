@@ -45,7 +45,7 @@ def get_livox_tag_filter_component():
     return livox_tag_filter_component
 
 
-def get_crop_box_min_range_component(context):
+def get_crop_box_min_range_component(context, livox_frame_id):
     use_tag_filter = IfCondition(LaunchConfiguration('use_tag_filter')).evaluate(context)
     crop_box_min_range_component = ComposableNode(
         package='pointcloud_preprocessor',
@@ -56,7 +56,7 @@ def get_crop_box_min_range_component(context):
             ('output', 'min_range_cropped/pointcloud'),
         ],
         parameters=[{
-            'input_frame': LaunchConfiguration('base_frame'),
+            'input_frame': livox_frame_id,
             'output_frame': LaunchConfiguration('base_frame'),
             'min_x': 0.0,
             'max_x': 1.5,
@@ -96,7 +96,7 @@ def launch_setup(context, *args, **kwargs):
         package='rclcpp_components',
         executable='component_container',
         composable_node_descriptions=[
-            get_crop_box_min_range_component(context),
+            get_crop_box_min_range_component(context, params['frame_id']),
         ],
         output='screen',
     )
