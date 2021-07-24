@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-  <!-- TODO: add the appropriate vehicle and sensor model below. -->
-  <arg name="vehicle_model" default=""/>
-  <arg name="sensor_model" default=""/>
+  <arg name="vehicle_model" default="ymc_golfcart_proto2"/>
+  <arg name="sensor_model" default="aip_x1"/>
+
   <arg name="map_path" default=""/>
   <arg name="rviz" default="false"/>
 

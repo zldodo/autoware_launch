@@ -12,7 +12,7 @@
   <!-- Optional parameters for scenario simulation -->
   <arg name="initial_engage_state" default="true"/>
   <arg name="perception/enable_detection_failure" default="true"/>
-  <arg name="perception/enable_object_recognition" default="true"/>
+  <arg name="perception/enable_object_recognition" default="false"/>
   <arg name="sensing/visible_range" default="300.0"/>
   <arg name="scenario_simulation" default="false"/>
   <!-- Optional parameters for vcu emulation -->

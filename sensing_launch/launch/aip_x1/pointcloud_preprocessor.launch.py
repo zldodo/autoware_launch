@@ -41,13 +41,6 @@ def get_vehicle_info(context):
     return p
 
 
-def get_vehicle_mirror_info(context):
-    path = LaunchConfiguration('vehicle_mirror_param_file').perform(context)
-    with open(path, 'r') as f:
-        p = yaml.safe_load(f)['/**']['ros__parameters']
-    return p
-
-
 def launch_setup(context, *args, **kwargs):
 
     pkg = 'pointcloud_preprocessor'
@@ -62,10 +55,11 @@ def launch_setup(context, *args, **kwargs):
         remappings=[('output', 'concatenated/pointcloud')],
         parameters=[{
             'input_topics': ['/sensing/lidar/top/outlier_filtered/pointcloud',
-                             '/sensing/lidar/front_left/mirror_cropped/pointcloud',
-                             '/sensing/lidar/front_right/mirror_cropped/pointcloud',
-                             '/sensing/lidar/front_center/mirror_cropped/pointcloud'],
+                             '/sensing/lidar/front_left/min_range_cropped/pointcloud',
+                             '/sensing/lidar/front_right/min_range_cropped/pointcloud',
+                             '/sensing/lidar/front_center/min_range_cropped/pointcloud'],
             'output_frame': LaunchConfiguration('base_frame'),
+            'timeout_sec': 1.0
         }],
         extra_arguments=[{
             'use_intra_process_comms': LaunchConfiguration('use_intra_process')
@@ -142,12 +136,26 @@ def launch_setup(context, *args, **kwargs):
         }],
     )
 
+    livox_concat_component = ComposableNode(
+        package=pkg,
+        plugin='pointcloud_preprocessor::PointCloudConcatenateDataSynchronizerComponent',
+        name='livox_concatenate_data',
+        remappings=[('output', 'livox_concatenated/pointcloud')],
+        parameters=[{
+            'input_topics': ['/sensing/lidar/front_left/min_range_cropped/pointcloud',
+                             '/sensing/lidar/front_right/min_range_cropped/pointcloud',
+                             '/sensing/lidar/front_center/min_range_cropped/pointcloud'],
+            'output_frame': LaunchConfiguration('base_frame'),
+            'timeout_sec': 1.0
+        }]
+    )
+
     short_height_obstacle_detection_area_filter_component = ComposableNode(
         package=pkg,
         plugin='pointcloud_preprocessor::CropBoxFilterComponent',
         name='short_height_obstacle_detection_area_filter',
         remappings=[
-            ('input', 'front_center/mirror_cropped/pointcloud'),
+            ('input', 'livox_concatenated/pointcloud'),
             ('output', 'short_height_obstacle_detection_area/pointcloud'),
         ],
         parameters=[{
@@ -179,8 +187,9 @@ def launch_setup(context, *args, **kwargs):
             'voxel_size_x': 0.25,
             'voxel_size_y': 0.25,
         }],
+        # cannot use intra process because vector map filter uses transient local.
         extra_arguments=[{
-            'use_intra_process_comms': LaunchConfiguration('use_intra_process')
+            'use_intra_process_comms': False
         }],
     )
 
@@ -197,7 +206,7 @@ def launch_setup(context, *args, **kwargs):
             'min_points': 400,
             'min_inliers': 200,
             'max_iterations': 50,
-            'height_threshold': 0.12,
+            'height_threshold': 0.18,
             'plane_slope_threshold': 10.0,
             'voxel_size_x': 0.2,
             'voxel_size_y': 0.2,
@@ -218,6 +227,7 @@ def launch_setup(context, *args, **kwargs):
             'input_topics': ['/sensing/lidar/rough/no_ground/pointcloud',
                              '/sensing/lidar/short_height/no_ground/pointcloud'],
             'output_frame': LaunchConfiguration('base_frame'),
+            'timeout_sec': 1.0
         }],
         extra_arguments=[{
             'use_intra_process_comms': LaunchConfiguration('use_intra_process')
@@ -280,23 +290,6 @@ def launch_setup(context, *args, **kwargs):
         }],
     )
 
-    relay_component = ComposableNode(
-        package='topic_tools',
-        plugin='topic_tools::RelayNode',
-        name='relay',
-        parameters=[{
-            'input_topic': '/sensing/lidar/top/outlier_filtered/pointcloud',
-            'output_topic': '/sensing/lidar/pointcloud',
-            'type': 'sensor_msgs/msg/PointCloud2',
-            'history': 'keep_last',
-            'depth': 5,
-            'reliability': 'best_effort',
-        }],
-        extra_arguments=[{
-            'use_intra_process_comms': LaunchConfiguration('use_intra_process')
-        }],
-    )
-
     # set container to run all required components in the same process
     container = ComposableNodeContainer(
         name='pointcloud_preprocessor_container',
@@ -306,12 +299,12 @@ def launch_setup(context, *args, **kwargs):
         composable_node_descriptions=[
             cropbox_component,
             ray_ground_filter_component,
+            livox_concat_component,
             short_height_obstacle_detection_area_filter_component,
             vector_map_filter_component,
             ransac_ground_filter_component,
             concat_no_ground_component,
-            voxel_grid_filter_component,
-            relay_component,
+            voxel_grid_filter_component
         ],
         output='screen',
     )

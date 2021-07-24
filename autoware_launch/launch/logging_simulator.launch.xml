@@ -19,6 +19,7 @@
   <arg name="rviz" default="true" description="launch rviz" />
   <arg name="lanelet2_map_file" default="lanelet2_map.osm" />
   <arg name="pointcloud_map_file" default="pointcloud_map.pcd" />
+  <arg name="use_object_recognition" default="false" description="if use_object_recognition:=false, /perception/object_recognition/objects topic has an empty DynamicObjectArray"/>
 
   <!-- Global parameters -->
   <include file="$(find-pkg-share autoware_launch)/launch/global_params.launch.py">
@@ -67,6 +68,7 @@
   <!-- Localization -->
   <group>
     <include file="$(find-pkg-share localization_launch)/launch/localization.launch.xml" if="$(var localization)">
+      <arg name="input_imu_topic" value="/sensing/lidar/front_center/livox/imu" />
     </include>
   </group>
 
@@ -76,6 +78,7 @@
     <include file="$(find-pkg-share perception_launch)/launch/perception.launch.xml" if="$(var perception)">
       <!-- options for mode: camera_lidar_fusion, lidar, camera -->
       <arg name="mode" value="lidar" />
+      <arg name="use_object_recognition" value="$(var use_object_recognition)" />
     </include>
   </group>
 
