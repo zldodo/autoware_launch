@@ -162,7 +162,7 @@ def launch_setup(context, *args, **kwargs):
             'input_frame': LaunchConfiguration('base_frame'),
             'output_frame': LaunchConfiguration('base_frame'),
             'min_x': 0.0,
-            'max_x': 15.6,  # max_x: 14.0m + base_link2livox_front_center distance 1.6m
+            'max_x': 19.6,  # max_x: 18.0m + base_link2livox_front_center distance 1.6m
             'min_y': -4.0,
             'max_y': 4.0,
             'min_z': -0.5,
