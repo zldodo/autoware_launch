@@ -19,7 +19,6 @@
   <arg name="rviz" default="true" description="launch rviz" />
   <arg name="lanelet2_map_file" default="lanelet2_map.osm" />
   <arg name="pointcloud_map_file" default="pointcloud_map.pcd" />
-  <set_parameter name="use_sim_time" value="true" />
   <arg name="use_object_recognition" default="false" description="if use_object_recognition:=false, /perception/object_recognition/objects topic has an empty DynamicObjectArray"/>
 
   <!-- Global parameters -->
