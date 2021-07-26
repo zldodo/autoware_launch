@@ -27,6 +27,8 @@
       <arg name="initial_engage_state" value="$(var initial_engage_state)"/>
       <arg name="use_support_low_speed_engage" value="true" />
     </include>
-    <include file="$(find-pkg-share g30esli_interface_awiv_adapter)/launch/g30esli_interface_awiv_adapter.launch.xml"/>
+    <include file="$(find-pkg-share g30esli_interface_awiv_adapter)/launch/g30esli_interface_awiv_adapter.launch.xml">
+      <arg name="g30esli_interface_awiv_adapter_param_file" value="$(find-pkg-share individual_params)/config/$(var vehicle_id)/aip_x1/g30esli_interface_awiv_adapter.param.yaml" />
+    </include>
   </group>
 </launch>
