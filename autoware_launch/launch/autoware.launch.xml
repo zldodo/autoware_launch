@@ -43,7 +43,6 @@
 
   <!-- Localization -->
   <include file="$(find-pkg-share localization_launch)/launch/localization.launch.xml">
-    <arg name="input_imu_topic" value="/sensing/lidar/front_center/livox/imu" />
   </include>
 
   <!-- Perception -->
