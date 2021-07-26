@@ -206,7 +206,7 @@ def launch_setup(context, *args, **kwargs):
             'min_points': 400,
             'min_inliers': 200,
             'max_iterations': 50,
-            'height_threshold': 0.18,
+            'height_threshold': 0.12,
             'plane_slope_threshold': 10.0,
             'voxel_size_x': 0.2,
             'voxel_size_y': 0.2,
@@ -234,12 +234,33 @@ def launch_setup(context, *args, **kwargs):
         }],
     )
 
+    compare_elevation_map_filter_component = ComposableNode(
+        package=pkg,
+        plugin='pointcloud_preprocessor::CompareElevationMapFilterComponent',
+        name='compare_elevation_map_filter_node',
+        remappings=[
+            ('input', 'no_ground/concatenated/pointcloud'),
+            ('output', 'map_filtered/pointcloud'),
+            ('input/elevation_map', '/map/elevation_map'),
+        ],
+        parameters=[{
+            'map_frame': 'map',
+            'map_layer_name': 'elevation',
+            'height_diff_thresh': 0.15,
+            'input_frame': 'map',
+            'output_frame': 'base_link',
+        }],
+        extra_arguments=[{
+            'use_intra_process_comms': False  # can't use this with transient_local
+        }],
+    )
+
     voxel_grid_filter_component = ComposableNode(
         package=pkg,
         plugin='pointcloud_preprocessor::VoxelGridDownsampleFilterComponent',
         name='voxel_grid_filter',
         remappings=[
-            ('input', 'no_ground/concatenated/pointcloud'),
+            ('input', 'map_filtered/pointcloud'),
             ('output', 'voxel_grid_filtered/pointcloud'),
         ],
         parameters=[{
@@ -301,9 +322,10 @@ def launch_setup(context, *args, **kwargs):
             ray_ground_filter_component,
             livox_concat_component,
             short_height_obstacle_detection_area_filter_component,
-            vector_map_filter_component,
             ransac_ground_filter_component,
+            vector_map_filter_component,
             concat_no_ground_component,
+            compare_elevation_map_filter_component,
             voxel_grid_filter_component
         ],
         output='screen',
