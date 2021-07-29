@@ -8,6 +8,7 @@
   <arg name="rviz" default="true" description="launch rviz"/>
   <arg name="lanelet2_map_file" default="lanelet2_map.osm" />
   <arg name="pointcloud_map_file" default="pointcloud_map.pcd" />
+  <arg name="use_object_recognition" default="false" description="if use_object_recognition:=false, /perception/object_recognition/objects topic has an empty DynamicObjectArray"/>
 
   <!-- Global parameters -->
   <include file="$(find-pkg-share autoware_global_parameter_loader)/launch/global_params.launch.py">
@@ -48,6 +49,7 @@
   <include file="$(find-pkg-share perception_launch)/launch/perception.launch.xml">
     <!-- options for mode: camera_lidar_fusion, lidar, camera -->
     <arg name="mode" value="lidar" />
+    <arg name="use_object_recognition" value="$(var use_object_recognition)" />
   </include>
 
   <!-- Planning -->
@@ -68,6 +70,6 @@
   </node>
 
   <!-- Web Controller -->
-  <include file="$(find-pkg-share autoware_web_controller)/launch/autoware_web_controller.launch.xml" />
+  <!-- <include file="$(find-pkg-share autoware_web_controller)/launch/autoware_web_controller.launch.xml" /> -->
 
 </launch>
