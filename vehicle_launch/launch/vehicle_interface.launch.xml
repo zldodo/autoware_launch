@@ -8,6 +8,7 @@
 
   <arg name="vehicle_model_pkg" default="$(find-pkg-share $(var vehicle_model)_description)"/>
 
+  <let name="is_not_ymc_golfcart_m0" value="$(eval &quot;'$(var vehicle_model)'!='ymc_golfcart_m0'&quot;)" />
 
   <!-- simulation mode -->
   <group if="$(var simulation)">
@@ -22,30 +23,16 @@
 
   <!-- real mode -->
   <group unless="$(var simulation)">
-    <group if="$(eval &quot;'$(var vehicle_model)'=='ymc_golfcart_m0'&quot;)">
-      <include file="$(find-pkg-share g30esli_interface)/launch/g30esli_interface.launch.xml">
-        <arg name="g30esli_interface_param_file" value="$(find-pkg-share individual_params)/config/$(var vehicle_id)/aip_x1/g30esli_interface.param.yaml" />
-        <arg name="initial_engage_state" value="$(var initial_engage_state)"/>
-        <arg name="use_disengage_override" value="false" />
-        <arg name="use_vehicle_key_override" value="false" />
-        <arg name="use_accel_pedal_override" value="false" />
-        <arg name="use_brake_pedal_override" value="false" />
-        <arg name="use_steer_torque_override" value="false" />
-        <arg name="use_support_low_speed_engage" value="true" />
-      </include>
-    </group>
-    <group unless="$(eval &quot;'$(var vehicle_model)'=='ymc_golfcart_m0'&quot;)">
-      <include file="$(find-pkg-share g30esli_interface)/launch/g30esli_interface.launch.xml">
-        <arg name="g30esli_interface_param_file" value="$(find-pkg-share individual_params)/config/$(var vehicle_id)/aip_x1/g30esli_interface.param.yaml" />
-        <arg name="initial_engage_state" value="$(var initial_engage_state)"/>
-        <arg name="use_disengage_override" value="true" />
-        <arg name="use_vehicle_key_override" value="true" />
-        <arg name="use_accel_pedal_override" value="true" />
-        <arg name="use_brake_pedal_override" value="true" />
-        <arg name="use_steer_torque_override" value="false" />
-        <arg name="use_support_low_speed_engage" value="true" />
-      </include>
-    </group>
+    <include file="$(find-pkg-share g30esli_interface)/launch/g30esli_interface.launch.xml">
+      <arg name="g30esli_interface_param_file" value="$(find-pkg-share individual_params)/config/$(var vehicle_id)/aip_x1/g30esli_interface.param.yaml" />
+      <arg name="initial_engage_state" value="$(var initial_engage_state)"/>
+      <arg name="use_disengage_override" value="$(var is_not_ymc_golfcart_m0)" />
+      <arg name="use_vehicle_key_override" value="$(var is_not_ymc_golfcart_m0)" />
+      <arg name="use_accel_pedal_override" value="$(var is_not_ymc_golfcart_m0)" />
+      <arg name="use_brake_pedal_override" value="$(var is_not_ymc_golfcart_m0)" />
+      <arg name="use_steer_torque_override" value="false" />
+      <arg name="use_support_low_speed_engage" value="true" />
+    </include>
     <include file="$(find-pkg-share g30esli_interface_awiv_adapter)/launch/g30esli_interface_awiv_adapter.launch.xml">
       <arg name="g30esli_interface_awiv_adapter_param_file" value="$(find-pkg-share individual_params)/config/$(var vehicle_id)/aip_x1/g30esli_interface_awiv_adapter.param.yaml" />
     </include>
