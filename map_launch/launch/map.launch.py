@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+
 import launch
 from launch.actions import DeclareLaunchArgument
 from launch.actions import GroupAction
@@ -22,6 +24,7 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.actions import PushRosNamespace
 from launch_ros.descriptions import ComposableNode
+from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
@@ -82,6 +85,28 @@ def generate_launch_description():
         }],
     )
 
+    elevation_map_loader = ComposableNode(
+        package='map_loader',
+        plugin='ElevationMapLoaderNode',
+        name='elevation_map_loader',
+        remappings=[('output/elevation_map', 'elevation_map'),
+                    ('input/pointcloud_map', 'pointcloud_map'),
+                    ('input/vector_map', 'vector_map')],
+        parameters=[
+            {
+                'param_file_path': LaunchConfiguration('elevation_map_param_file_path'),
+                'use_lane_filter': False,
+                'use_inpaint': True,
+                'inpaint_radius': 1.0,
+                'elevation_map_file_path': LaunchConfiguration('elevation_map_file_path'),
+                'use_elevation_map_cloud_publisher': False,
+            }
+        ],
+        extra_arguments=[{
+            'use_intra_process_comms': LaunchConfiguration('use_intra_process')
+        }],
+    )
+
     container = ComposableNodeContainer(
         name='map_container',
         namespace='',
@@ -92,6 +117,7 @@ def generate_launch_description():
             lanelet2_map_visualization,
             pointcloud_map_loader,
             map_tf_generator,
+            elevation_map_loader,
         ],
         output='screen',
     )
@@ -105,10 +131,16 @@ def generate_launch_description():
                        LaunchConfiguration('map_path'), '/lanelet2_map.osm'],
                        'path to lanelet2 map file'),
         add_launch_arg('pointcloud_map_path', [
-                       LaunchConfiguration('map_path'), '/pointcloud_map.pcd'],
-                       'path to pointcloud map file'),
+                       LaunchConfiguration('map_path'), '/pointcloud_map.pcd']
+                       'path to lanelet2 map file'),
         add_launch_arg('use_intra_process', 'false', 'use ROS2 component container communication'),
         add_launch_arg('use_multithread', 'false', 'use multithread'),
+        add_launch_arg('elevation_map_param_file_path',
+                       os.path.join(FindPackageShare('map_launch').find('map_launch'),
+                                    'config', 'elevation_map_parameters.yaml')),
+        add_launch_arg('elevation_map_file_path', [
+                       LaunchConfiguration('map_path'), '/elevation_map']),
+
         SetLaunchConfiguration(
             'container_executable',
             'component_container',
