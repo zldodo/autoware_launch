@@ -140,7 +140,6 @@ def generate_launch_description():
                                     'config', 'elevation_map_parameters.yaml')),
         add_launch_arg('elevation_map_file_path', [
                        LaunchConfiguration('map_path'), '/elevation_map']),
-
         SetLaunchConfiguration(
             'container_executable',
             'component_container',
