@@ -132,7 +132,7 @@ def generate_launch_description():
                        'path to lanelet2 map file'),
         add_launch_arg('pointcloud_map_path', [
                        LaunchConfiguration('map_path'), '/pointcloud_map.pcd'],
-                       'path to lanelet2 map file'),
+                       'path to pointcloud map file'),
         add_launch_arg('use_intra_process', 'false', 'use ROS2 component container communication'),
         add_launch_arg('use_multithread', 'false', 'use multithread'),
         add_launch_arg('elevation_map_param_file_path',
