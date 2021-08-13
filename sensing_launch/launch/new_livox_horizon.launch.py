@@ -79,7 +79,7 @@ def launch_setup(context, *args, **kwargs):
         params = yaml.safe_load(f)['/**']['ros__parameters']
 
     livox_driver_node = Node(
-        node_executable='lidar_ros_driver_node',
+        executable='lidar_ros_driver_node',
         package='lidar_ros_driver',
         name='livox_horizon',
         remappings=[
@@ -118,7 +118,7 @@ def generate_launch_description():
     def add_launch_arg(name: str, default_value=None):
         launch_arguments.append(DeclareLaunchArgument(name, default_value=default_value))
 
-    add_launch_arg('launch_driver')
+    add_launch_arg('launch_driver', 'true')
     add_launch_arg('base_frame', 'base_link')
     add_launch_arg('use_tag_filter', 'true')
     add_launch_arg('lidar_config_file')
