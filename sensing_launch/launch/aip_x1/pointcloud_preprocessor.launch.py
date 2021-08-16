@@ -206,7 +206,7 @@ def launch_setup(context, *args, **kwargs):
             'min_points': 400,
             'min_inliers': 200,
             'max_iterations': 50,
-            'height_threshold': 0.12,
+            'height_threshold': 0.18,
             'plane_slope_threshold': 10.0,
             'voxel_size_x': 0.2,
             'voxel_size_y': 0.2,
