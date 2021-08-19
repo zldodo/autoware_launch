@@ -22,6 +22,7 @@ from launch.conditions import IfCondition
 from launch.conditions import UnlessCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import ComposableNodeContainer
+from launch_ros.actions import LoadComposableNodes
 from launch_ros.actions import PushRosNamespace
 from launch_ros.descriptions import ComposableNode
 from launch_ros.substitutions import FindPackageShare
@@ -117,9 +118,14 @@ def generate_launch_description():
             lanelet2_map_visualization,
             pointcloud_map_loader,
             map_tf_generator,
-            elevation_map_loader,
         ],
         output='screen',
+    )
+
+    loader = LoadComposableNodes(
+        composable_node_descriptions=[elevation_map_loader],
+        target_container=container,
+        condition=IfCondition(LaunchConfiguration('use_elevation_map')),
     )
 
     def add_launch_arg(name: str, default_value=None, description=None):
@@ -140,6 +146,7 @@ def generate_launch_description():
                                     'config', 'elevation_map_parameters.yaml')),
         add_launch_arg('elevation_map_file_path', [
                        LaunchConfiguration('map_path'), '/elevation_map']),
+        add_launch_arg('use_elevation_map', 'true'),
         SetLaunchConfiguration(
             'container_executable',
             'component_container',
@@ -153,5 +160,6 @@ def generate_launch_description():
         GroupAction([
             PushRosNamespace('map'),
             container,
+            loader,
         ])
     ])

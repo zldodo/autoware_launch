@@ -20,6 +20,8 @@
   <arg name="lanelet2_map_file" default="lanelet2_map.osm" description="lanelet2 map file name"/>
   <arg name="pointcloud_map_file" default="pointcloud_map.pcd" description="pointcloud map file name"/>
   <arg name="use_object_recognition" default="false" description="if use_object_recognition:=false, /perception/object_recognition/objects topic has an empty DynamicObjectArray"/>
+  <!-- Optional parameters for compare_elevation_map_filter -->
+  <arg name="use_elevation_map" default="true" description="use elevation map"/>
 
   <!-- Global parameters -->
   <include file="$(find-pkg-share autoware_global_parameter_loader)/launch/global_params.launch.py">
