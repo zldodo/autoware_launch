@@ -37,19 +37,20 @@
     <!-- Error Monitor -->
     <group if="$(eval &quot;'$(var run_mode)'=='online'&quot;)">
       <include file="$(find-pkg-share autoware_error_monitor)/launch/autoware_error_monitor.launch.xml">
+        <arg name="use_emergency_hold" value="true" />
         <arg name="config_file" value="$(find-pkg-share system_launch)/config/autoware_error_monitor.param.yaml" />
       </include>
     </group>
     <group if="$(eval &quot;'$(var run_mode)'=='planning_simulation'&quot;)">
       <include file="$(find-pkg-share autoware_error_monitor)/launch/autoware_error_monitor.launch.xml">
+        <arg name="use_emergency_hold" value="true" />
         <arg name="config_file" value="$(find-pkg-share system_launch)/config/autoware_error_monitor.planning_simulation.param.yaml" />
       </include>
     </group>
 
     <!-- Emergency Handler -->
     <include file="$(find-pkg-share emergency_handler)/launch/emergency_handler.launch.xml">
-      <arg name="config_file" value="$(find-pkg-share emergency_handler)/config/emergency_handler.param.yaml" />
-      <arg name="use_emergency_hold" value="true" />
+      <arg name="config_file" value="$(find-pkg-share system_launch)/config/emergency_handler.param.yaml" />
     </include>
 
     <!-- Autoware Version Publisher-->
