@@ -92,7 +92,7 @@ def generate_launch_description():
         ],
         parameters=[
             {'lane_change_search_distance': 30.0},
-            {'intersection_search_distance': 30.0},
+            {'intersection_search_distance': 15.0},
         ],
         extra_arguments=[
             {'use_intra_process_comms': LaunchConfiguration('use_intra_process')}
@@ -133,9 +133,13 @@ def generate_launch_description():
         intersection_param = yaml.safe_load(f)['/**']['ros__parameters']
 
     stop_line_param_path = os.path.join(
-        get_package_share_directory('behavior_velocity_planner'),
+        get_package_share_directory('planning_launch'),
         'config',
-        'stop_line.param.yaml',
+        'scenario_planning',
+        'lane_driving',
+        'behavior_planning',
+        'behavior_velocity_planner',
+        'stop_line.param.yaml'
     )
     with open(stop_line_param_path, 'r') as f:
         stop_line_param = yaml.safe_load(f)['/**']['ros__parameters']

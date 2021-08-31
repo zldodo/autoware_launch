@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+
 import launch
 from launch.actions import DeclareLaunchArgument
 from launch.actions import GroupAction
@@ -21,8 +23,10 @@ from launch.conditions import UnlessCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.actions import Node
+from launch_ros.actions import LoadComposableNodes
 from launch_ros.actions import PushRosNamespace
 from launch_ros.descriptions import ComposableNode
+from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
@@ -94,6 +98,28 @@ def generate_launch_description():
         }],
     )
 
+    elevation_map_loader = ComposableNode(
+        package='map_loader',
+        plugin='ElevationMapLoaderNode',
+        name='elevation_map_loader',
+        remappings=[('output/elevation_map', 'elevation_map'),
+                    ('input/pointcloud_map', 'pointcloud_map'),
+                    ('input/vector_map', 'vector_map')],
+        parameters=[
+            {
+                'param_file_path': LaunchConfiguration('elevation_map_param_file_path'),
+                'use_lane_filter': False,
+                'use_inpaint': True,
+                'inpaint_radius': 1.0,
+                'elevation_map_file_path': LaunchConfiguration('elevation_map_file_path'),
+                'use_elevation_map_cloud_publisher': False,
+            }
+        ],
+        extra_arguments=[{
+            'use_intra_process_comms': LaunchConfiguration('use_intra_process')
+        }],
+    )
+
     container = ComposableNodeContainer(
         name='map_container',
         namespace='',
@@ -106,6 +132,12 @@ def generate_launch_description():
             map_tf_generator,
         ],
         output='screen',
+    )
+
+    loader = LoadComposableNodes(
+        composable_node_descriptions=[elevation_map_loader],
+        target_container=container,
+        condition=IfCondition(LaunchConfiguration('use_elevation_map')),
     )
 
     def add_launch_arg(name: str, default_value=None, description=None):
@@ -121,6 +153,12 @@ def generate_launch_description():
                        'path to pointcloud map file'),
         add_launch_arg('use_intra_process', 'false', 'use ROS2 component container communication'),
         add_launch_arg('use_multithread', 'false', 'use multithread'),
+        add_launch_arg('elevation_map_param_file_path',
+                       os.path.join(FindPackageShare('map_launch').find('map_launch'),
+                                    'config', 'elevation_map_parameters.yaml')),
+        add_launch_arg('elevation_map_file_path', [
+                       LaunchConfiguration('map_path'), '/elevation_map']),
+        add_launch_arg('use_elevation_map', 'true'),
         SetLaunchConfiguration(
             'container_executable',
             'component_container',
@@ -135,5 +173,6 @@ def generate_launch_description():
             PushRosNamespace('map'),
             container,
             map_hash_generator,
+            loader,
         ])
     ])
