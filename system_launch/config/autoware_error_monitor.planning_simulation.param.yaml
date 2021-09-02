@@ -78,6 +78,8 @@
           # /autoware/system/resource_monitoring/gpu_usage: { sf_at: "warn", lf_at: "error", spf_at: "none" }  # No need to watch in simulation
           # /autoware/system/resource_monitoring/gpu_memory_usage: { sf_at: "warn", lf_at: "error", spf_at: "none" }  # No need to watch in simulation
           # /autoware/system/resource_monitoring/gpu_thermal_throttling: { sf_at: "warn", lf_at: "error", spf_at: "none" }  # No need to watch in simulation
+        auto_recovery:
+          /autoware/vehicle/obstacle_crush: false
 
       remote_control:
         names:

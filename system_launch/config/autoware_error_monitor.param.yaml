@@ -78,6 +78,8 @@
           /autoware/system/resource_monitoring/gpu_usage: { sf_at: "warn", lf_at: "error", spf_at: "none" }
           /autoware/system/resource_monitoring/gpu_memory_usage: { sf_at: "warn", lf_at: "error", spf_at: "none" }
           /autoware/system/resource_monitoring/gpu_thermal_throttling: { sf_at: "warn", lf_at: "error", spf_at: "none" }
+        auto_recovery:
+          /autoware/vehicle/obstacle_crush: false
 
       remote_control:
         names:
