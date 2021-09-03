@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
 import launch
 from launch.actions import DeclareLaunchArgument
 from launch.actions import GroupAction
@@ -21,6 +19,7 @@ from launch.actions import SetLaunchConfiguration
 from launch.conditions import IfCondition
 from launch.conditions import UnlessCondition
 from launch.substitutions import LaunchConfiguration
+from launch.substitutions import PathJoinSubstitution
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.actions import LoadComposableNodes
 from launch_ros.actions import Node
@@ -111,7 +110,8 @@ def generate_launch_description():
                 'use_lane_filter': False,
                 'use_inpaint': True,
                 'inpaint_radius': 1.0,
-                'elevation_map_file_path': LaunchConfiguration('elevation_map_file_path'),
+                'elevation_map_directory': LaunchConfiguration('elevation_map_directory'),
+                'pointcloud_map_path': LaunchConfiguration('pointcloud_map_path'),
                 'use_elevation_map_cloud_publisher': False,
             }
         ],
@@ -153,11 +153,10 @@ def generate_launch_description():
                        'path to pointcloud map file'),
         add_launch_arg('use_intra_process', 'false', 'use ROS2 component container communication'),
         add_launch_arg('use_multithread', 'false', 'use multithread'),
-        add_launch_arg('elevation_map_param_file_path',
-                       os.path.join(FindPackageShare('map_launch').find('map_launch'),
-                                    'config', 'elevation_map_parameters.yaml')),
-        add_launch_arg('elevation_map_file_path', [
-                       LaunchConfiguration('map_path'), '/elevation_map']),
+        add_launch_arg('elevation_map_param_file_path', PathJoinSubstitution(
+            [FindPackageShare('map_launch'), 'config', 'elevation_map_parameters.yaml'])),
+        add_launch_arg('elevation_map_directory', PathJoinSubstitution(
+            [FindPackageShare('map_loader'), 'data', 'elevation_maps'])),
         add_launch_arg('use_elevation_map', 'true'),
         SetLaunchConfiguration(
             'container_executable',
