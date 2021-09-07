@@ -60,7 +60,7 @@
             "/autoware/system/resource_monitoring/gpu_thermal_throttling",
             "/autoware/vehicle/alive_monitoring",
             "/autoware/vehicle/vehicle_errors",
-            "/autoware/vehicle/obstacle_crush",
+            "/autoware/vehicle/obstacle_crash",
           ]
         diag_level:
           /autoware/localization/matching_score: { sf_at: "error", lf_at: "none", spf_at: "none" }
@@ -80,7 +80,7 @@
           /autoware/system/resource_monitoring/gpu_memory_usage: { sf_at: "warn", lf_at: "error", spf_at: "none" }
           /autoware/system/resource_monitoring/gpu_thermal_throttling: { sf_at: "warn", lf_at: "error", spf_at: "none" }
         auto_recovery:
-          /autoware/vehicle/obstacle_crush: false
+          /autoware/vehicle/obstacle_crash: false
 
       remote_control:
         names:
@@ -91,5 +91,5 @@
             "/autoware/system/emergency_stop_operation",
             "/autoware/vehicle/alive_monitoring",
             "/autoware/vehicle/vehicle_errors",
-            "/autoware/vehicle/obstacle_crush",
+            "/autoware/vehicle/obstacle_crash",
           ]
