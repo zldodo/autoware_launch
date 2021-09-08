@@ -21,14 +21,15 @@
   <arg name="camera_info7" default="/sensing/camera/camera7/camera_info"/>
   <arg name="image_number" default="6" description="choose image raw number(0-7)"/>
   <arg name="use_vector_map" default="true" description="use vector map in prediction"/>
-  <arg name="use_empty_dynamic_object_publisher" default="false" description="if use_empty_dynamic_object_publisher:=true, /perception/object_recognition/objects topic has an empty DynamicObjectArray"/>
+  <arg name="use_object_recognition" default="true" />
+  <arg name="use_traffic_light_recognition" default="false" />
 
   <!-- perception module -->
   <group>
     <push-ros-namespace namespace="perception"/>
 
     <!-- object recognition module -->
-    <group unless="$(var use_empty_dynamic_object_publisher)">
+    <group if="$(var use_object_recognition)">
       <push-ros-namespace namespace="object_recognition"/>
       <!-- detection module -->
       <group>
@@ -70,15 +71,15 @@
       </group>
     </group>
 
-    <group if="$(var use_empty_dynamic_object_publisher)">
+    <group unless="$(var use_object_recognition)">
       <push-ros-namespace namespace="object_recognition"/>
       <node pkg="dummy_perception_publisher" exec="empty_objects_publisher" name="empty_objects_publisher" output="screen">
-        <remap from="~/output/objects" to="/perception/object_recognition/objects" />
+        <remap from="output/objects" to="/perception/object_recognition/objects" />
       </node>
     </group>
 
     <!-- traffic light module -->
-    <group>
+    <group if="$(var use_traffic_light_recognition)">
       <push-ros-namespace namespace="traffic_light_recognition"/>
       <include file="$(find-pkg-share perception_launch)/launch/traffic_light_recognition/traffic_light.launch.xml">
       </include>

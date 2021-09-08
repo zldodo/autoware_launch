@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-  <!-- TODO: add the appropriate vehicle and sensor model below. -->
-  <arg name="vehicle_model" default="" description="vehicle model name"/>
-  <arg name="sensor_model" default="" description="sensor model name"/>
+  <arg name="vehicle_model" default="ymc_golfcart_proto2" description="vehicle model name"/>
+  <arg name="sensor_model" default="aip_x1" description="sensor model name"/>
   <arg name="map_path" default="/opt/autoware/maps/" description="path to the directory of point cloud and lanelet2 map"/>
   <arg name="lanelet_map_file" default="lanelet2_map.osm" description="lanelet2 map file name"/>
   <arg name="pointcloud_map_file" default="pointcloud_map_file" description="pointcloud map file name"/>
