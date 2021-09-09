@@ -44,6 +44,7 @@
             "/autoware/sensing/lidar/livox/ptp_signal",
             "/autoware/sensing/lidar/livox/time_sync",
             "/autoware/system/alive_monitoring",
+            "/autoware/vehicle/vehicle_interface_connection",
             "/autoware/system/emergency_stop_operation",
             "/autoware/system/logging",
             # '/autoware/system/resource_monitoring/cpu_temperature', # Not working in containers
@@ -80,6 +81,8 @@
           # /autoware/system/resource_monitoring/gpu_memory_usage: { sf_at: "warn", lf_at: "error", spf_at: "none" }  # No need to watch in simulation
           # /autoware/system/resource_monitoring/gpu_thermal_throttling: { sf_at: "warn", lf_at: "error", spf_at: "none" }  # No need to watch in simulation
         auto_recovery:
+          /autoware/vehicle/vehicle_interface_connection: false
+          /autoware/vehicle/vehicle_errors: false
           /autoware/vehicle/obstacle_crash: false
 
       remote_control:
