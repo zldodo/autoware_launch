@@ -53,8 +53,8 @@
       <arg name="config_file" value="$(find-pkg-share system_launch)/config/emergency_handler.param.yaml" />
     </include>
 
-    <!-- Autoware Rosbag Keeper -->
-    <include file="$(find-pkg-share autoware_rosbag_keeper)/launch/autoware_rosbag_keeper.launch.xml">
+    <!-- Bagkeeper -->
+    <include file="$(find-pkg-share bagkeeper)/launch/bagkeeper.launch.xml">
       <arg name="keep_duration_before_trigger_in_sec" value="45" />
       <arg name="keep_duration_after_trigger_in_sec" value="15" />
     </include>
