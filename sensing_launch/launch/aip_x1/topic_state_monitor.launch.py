@@ -19,10 +19,10 @@ from launch_ros.descriptions import ComposableNode
 
 def generate_launch_description():
     # Topic Monitor For Livox Raw PointCloud
-    topic_state_monitor_front_center = ComposableNode(
+    topic_state_monitor_livox_front_center = ComposableNode(
         package='topic_state_monitor',
         plugin='topic_state_monitor::TopicStateMonitorNode',
-        name='topic_state_monitor_front_center',
+        name='topic_state_monitor_livox_front_center',
         parameters=[
             {
                 'topic': '/sensing/lidar/front_center/livox/lidar',
@@ -37,10 +37,10 @@ def generate_launch_description():
         ],
         extra_arguments=[{'use_intra_process_comms': True}]
     )
-    topic_state_monitor_front_left = ComposableNode(
+    topic_state_monitor_livox_front_left = ComposableNode(
         package='topic_state_monitor',
         plugin='topic_state_monitor::TopicStateMonitorNode',
-        name='topic_state_monitor_front_left',
+        name='topic_state_monitor_livox_front_left',
         parameters=[
             {
                 'topic': '/sensing/lidar/front_left/livox/lidar',
@@ -55,10 +55,10 @@ def generate_launch_description():
         ],
         extra_arguments=[{'use_intra_process_comms': True}]
     )
-    topic_state_monitor_front_right = ComposableNode(
+    topic_state_monitor_livox_front_right = ComposableNode(
         package='topic_state_monitor',
         plugin='topic_state_monitor::TopicStateMonitorNode',
-        name='topic_state_monitor_front_right',
+        name='topic_state_monitor_livox_front_right',
         parameters=[
             {
                 'topic': '/sensing/lidar/front_right/livox/lidar',
@@ -93,10 +93,10 @@ def generate_launch_description():
         ],
         extra_arguments=[{'use_intra_process_comms': True}]
     )
-    topic_state_monitor_front_left_min_range_cropped = ComposableNode(
+    topic_state_monitor_livox_front_left_min_range_cropped = ComposableNode(
         package='topic_state_monitor',
         plugin='topic_state_monitor::TopicStateMonitorNode',
-        name='topic_state_monitor_front_left_min_range_cropped',
+        name='topic_state_monitor_livox_front_left_min_range_cropped',
         parameters=[
             {
                 'topic': '/sensing/lidar/front_left/min_range_cropped/pointcloud',
@@ -111,10 +111,10 @@ def generate_launch_description():
         ],
         extra_arguments=[{'use_intra_process_comms': True}]
     )
-    topic_state_monitor_front_right_min_range_cropped = ComposableNode(
+    topic_state_monitor_livox_front_right_min_range_cropped = ComposableNode(
         package='topic_state_monitor',
         plugin='topic_state_monitor::TopicStateMonitorNode',
-        name='topic_state_monitor_front_right_min_range_cropped',
+        name='topic_state_monitor_livox_front_right_min_range_cropped',
         parameters=[
             {
                 'topic': '/sensing/lidar/front_right/min_range_cropped/pointcloud',
@@ -129,10 +129,10 @@ def generate_launch_description():
         ],
         extra_arguments=[{'use_intra_process_comms': True}]
     )
-    topic_state_monitor_front_center_min_range_cropped = ComposableNode(
+    topic_state_monitor_livox_front_center_min_range_cropped = ComposableNode(
         package='topic_state_monitor',
         plugin='topic_state_monitor::TopicStateMonitorNode',
-        name='topic_state_monitor_front_center_min_range_cropped',
+        name='topic_state_monitor_livox_front_center_min_range_cropped',
         parameters=[
             {
                 'topic': '/sensing/lidar/front_center/min_range_cropped/pointcloud',
@@ -193,13 +193,13 @@ def generate_launch_description():
         package='rclcpp_components',
         executable='component_container',
         composable_node_descriptions=[
-            topic_state_monitor_front_center,
-            topic_state_monitor_front_left,
-            topic_state_monitor_front_right,
+            topic_state_monitor_livox_front_center,
+            topic_state_monitor_livox_front_left,
+            topic_state_monitor_livox_front_right,
             topic_state_monitor_top_outlier_filtered,
-            topic_state_monitor_front_left_min_range_cropped,
-            topic_state_monitor_front_right_min_range_cropped,
-            topic_state_monitor_front_center_min_range_cropped,
+            topic_state_monitor_livox_front_left_min_range_cropped,
+            topic_state_monitor_livox_front_right_min_range_cropped,
+            topic_state_monitor_livox_front_center_min_range_cropped,
             topic_state_monitor_rough_no_ground,
             topic_state_monitor_short_height_no_ground
         ],
