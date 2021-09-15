@@ -33,6 +33,7 @@
       <!-- longitudinal controller -->
       <include file="$(find-pkg-share velocity_controller)/launch/velocity_controller.launch.xml">
         <arg name="velocity_controller_param_path" value="$(var velocity_controller_param_path)"/>
+        <arg name="enable_smooth_stop" value="false" />
       </include>
 
       <!-- latlon coupler -->
@@ -54,7 +55,7 @@
     <!-- vehicle cmd gate -->
     <include file="$(find-pkg-share vehicle_cmd_gate)/launch/vehicle_cmd_gate.launch.xml">
       <arg name="config_file" value="$(var vehicle_cmd_gate_param_path)"/>
-      <arg name="use_emergency_handling" value="false"/>
+      <arg name="use_emergency_handling" value="true"/>
       <arg name="use_external_emergency_stop" value="true"/>
     </include>
 
