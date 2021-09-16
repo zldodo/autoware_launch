@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import launch
-from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 
@@ -30,8 +29,7 @@ def _create_api_node(node_name, class_name, **kwargs):
 
 def generate_launch_description():
     components = [
-        _create_api_node('diagnostics', 'Diagnostics', parameters=[
-            {'diag_list_file_path': LaunchConfiguration('diag_list_file_path')}]),
+        _create_api_node('diagnostics', 'Diagnostics'),
         _create_api_node('door', 'Door'),
         _create_api_node('emergency', 'Emergency'),
         # _create_api_node('engage', 'Engage'),
