@@ -57,6 +57,9 @@
     <include file="$(find-pkg-share bagkeeper)/launch/bagkeeper.launch.xml">
       <arg name="keep_duration_before_trigger_in_sec" value="45" />
       <arg name="keep_duration_after_trigger_in_sec" value="15" />
+      <arg name="input_directory" value="/media/autoware/LOG" />
+      <arg name="output_directory" value="/media/autoware/ROSBAG" />
+      <arg name="must_be_mountpoint" value="/media/autoware/ROSBAG" />
     </include>
 
     <!-- Autoware Version Publisher-->
