@@ -10,7 +10,6 @@
       <arg name="output_topic" value="/sensing/imu/imu_data" />
       <arg name="param_file" value="$(find-pkg-share individual_params)/config/$(env VEHICLE_ID default)/aip_x1/imu_corrector.param.yaml" />
     </include>
-
   </group>
 
 </launch>
