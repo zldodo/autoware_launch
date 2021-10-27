@@ -12,11 +12,14 @@
   <!-- Optional parameters for scenario simulation -->
   <arg name="initial_engage_state" default="true" description="/vehicle/engage state after starting Autoware"/>
   <arg name="perception/enable_detection_failure" default="true" description="enable to simulate detection failure when using dummy perception"/>
-  <arg name="perception/enable_object_recognition" default="true" description="enable object recognition when using dummy perception"/>
+  <arg name="perception/enable_object_recognition" default="false" description="enable object recognition when using dummy perception"/>
   <arg name="sensing/visible_range" default="300.0" description="visible range when using dummy perception"/>
   <arg name="scenario_simulation" default="false" description="use scenario simulation"/>
   <!-- Optional parameters for vcu emulation -->
   <arg name="vehicle_simulation" default="true" description="use vehicle simulation"/>
+  <!-- Optional parameters for compare_elevation_map_filter -->
+  <arg name="use_elevation_map" default="false" description="use elevation map"/>
+  <arg name="use_start_request" default="false" description="use_start_request"/>
 
   <!-- Global parameters -->
   <include file="$(find-pkg-share autoware_global_parameter_loader)/launch/global_params.launch.py">
@@ -42,6 +45,7 @@
   <include file="$(find-pkg-share map_launch)/launch/map.launch.py">
     <arg name="lanelet2_map_path" value="$(var map_path)/$(var lanelet2_map_file)" />
     <arg name="pointcloud_map_path" value="$(var map_path)/$(var pointcloud_map_file)"/>
+    <arg name="use_elevation_map" value="$(var use_elevation_map)"/>
   </include>
 
   <!-- Planning -->
@@ -52,6 +56,7 @@
   <include file="$(find-pkg-share control_launch)/launch/control.launch.py">
     <!-- options for lateral_controller_mode: mpc_follower, pure_pursuit -->
     <arg name="lateral_controller_mode" value="mpc_follower" />
+    <arg name="use_start_request" value="$(var use_start_request)" />
   </include>
 
   <!-- Autoware API -->
