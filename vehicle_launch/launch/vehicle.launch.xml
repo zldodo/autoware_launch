@@ -4,9 +4,11 @@
   <arg name="sensor_model" description="sensor model name"/>
   <arg name="vehicle_id" default="$(env VEHICLE_ID default)" description="vehicle specific ID"/>
 
-  <arg name="initial_engage_state" default="true" description="/vehicle/engage state after starting Autoware"/>
+  <arg name="vehicle_model_pkg" default="$(find-pkg-share $(var vehicle_model)_description)" description="path to the directory of vehicle model package"/>
+
   <arg name="simulation" default="false" description="use simulation"/>
-  <arg name="scenario_simulation" default="false" description="use scenario simulation"/>
+
+  <let name="is_not_ymc_golfcart_m0" value="$(eval &quot;'$(var vehicle_model)'!='ymc_golfcart_m0'&quot;)" />
 
   <!-- vehicle description -->
   <group>
@@ -18,11 +20,17 @@
   </group>
 
   <!-- vehicle interface -->
-  <include file="$(find-pkg-share vehicle_launch)/launch/vehicle_interface.launch.xml">
+  <include file="$(find-pkg-share g30esli_interface)/launch/g30esli_interface.launch.xml">
+    <arg name="g30esli_interface_param_file" value="$(find-pkg-share individual_params)/config/$(var vehicle_id)/aip_x1/g30esli_interface.param.yaml" />
     <arg name="initial_engage_state" value="$(var initial_engage_state)"/>
-    <arg name="simulation" value="$(var simulation)"/>
-    <arg name="scenario_simulation" value="$(var scenario_simulation)"/>
-    <arg name="vehicle_model" value="$(var vehicle_model)"/>
-    <arg name="vehicle_id" value="$(var vehicle_id)"/>
+    <arg name="use_disengage_override" value="$(var is_not_ymc_golfcart_m0)" />
+    <arg name="use_vehicle_key_override" value="$(var is_not_ymc_golfcart_m0)" />
+    <arg name="use_accel_pedal_override" value="$(var is_not_ymc_golfcart_m0)" />
+    <arg name="use_brake_pedal_override" value="$(var is_not_ymc_golfcart_m0)" />
+    <arg name="use_steer_torque_override" value="false" />
+    <arg name="use_support_low_speed_engage" value="true" />
+  </include>
+  <include file="$(find-pkg-share g30esli_interface_awiv_adapter)/launch/g30esli_interface_awiv_adapter.launch.xml">
+    <arg name="g30esli_interface_awiv_adapter_param_file" value="$(find-pkg-share individual_params)/config/$(var vehicle_id)/aip_x1/g30esli_interface_awiv_adapter.param.yaml" />
   </include>
 </launch>
