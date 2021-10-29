@@ -34,8 +34,8 @@
         /autoware/planning/performance_monitoring/trajectory_validation: default
 
         /autoware/sensing/node_alive_monitoring: default
-        /autoware/sensing/lidar/velodyne/health_monitoring: { sf_at: "warn", lf_at: "error", spf_at: "none" }
-        /autoware/sensing/lidar/livox/health_monitoring: { sf_at: "warn", lf_at: "error", spf_at: "none" }
+        # /autoware/sensing/lidar/velodyne/health_monitoring: { sf_at: "warn", lf_at: "error", spf_at: "none" }
+        # /autoware/sensing/lidar/livox/health_monitoring: { sf_at: "warn", lf_at: "error", spf_at: "none" }
 
         /autoware/system/node_alive_monitoring: default
         /autoware/system/emergency_stop_operation: default
