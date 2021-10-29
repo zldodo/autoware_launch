@@ -3,6 +3,7 @@
 #   sf_at: diag level where it becomes Safe Fault
 #   lf_at: diag level where it becomes Latent Fault
 #   spf_at: diag level where it becomes Single Point Fault
+#   auto_recovery: Determines whether the system will automatically recover when it recovers from an error.
 #
 # Note:
 # empty-value for sf_at, lf_at and spf_at is "none"
@@ -10,64 +11,52 @@
 #   sf_at: "none"
 #   lf_at: "warn"
 #   spf_at: "error"
+#   auto_recovery: "true"
 ---
 /**:
   ros__parameters:
     required_modules:
       autonomous_driving:
-        names: [
-            "/autoware/control/autonomous_driving/node_alive_monitoring",
-            "/autoware/control/autonomous_driving/performance_monitoring/lane_departure",
-            "/autoware/control/control_command_gate/node_alive_monitoring",
+        /autoware/control/autonomous_driving/node_alive_monitoring: default
+        /autoware/control/autonomous_driving/performance_monitoring/lane_departure: default
+        /autoware/control/control_command_gate/node_alive_monitoring: default
 
-            "/autoware/localization/node_alive_monitoring",
-            # "/autoware/localization/performance_monitoring/matching_score",
-            # "/autoware/localization/performance_monitoring/localization_accuracy",
+        /autoware/localization/node_alive_monitoring: default
+        # /autoware/localization/performance_monitoring/matching_score: { sf_at: "warn", lf_at: "none", spf_at: "none" }
+        # /autoware/localization/performance_monitoring/localization_accuracy: default
 
-            "/autoware/map/node_alive_monitoring",
-            # "/autoware/map/map_validation",
+        /autoware/map/node_alive_monitoring: default
+        # /autoware/map/map_validation: default
 
-            "/autoware/perception/node_alive_monitoring",
+        /autoware/perception/node_alive_monitoring: default
 
-            "/autoware/planning/node_alive_monitoring",
-            "/autoware/planning/performance_monitoring/trajectory_validation",
+        /autoware/planning/node_alive_monitoring: default
+        /autoware/planning/performance_monitoring/trajectory_validation: default
 
-            "/autoware/sensing/node_alive_monitoring",
-            # "/autoware/sensing/lidar/velodyne/health_monitoring",
-            # "/autoware/sensing/lidar/livox/health_monitoring",
+        /autoware/sensing/node_alive_monitoring: default
+        /autoware/sensing/lidar/velodyne/health_monitoring: { sf_at: "warn", lf_at: "error", spf_at: "none" }
+        /autoware/sensing/lidar/livox/health_monitoring: { sf_at: "warn", lf_at: "error", spf_at: "none" }
 
-            "/autoware/system/node_alive_monitoring",
-            "/autoware/system/emergency_stop_operation",
-            # "/autoware/system/debug_data_logger",
-            # "/autoware/system/resource_monitoring",
+        /autoware/system/node_alive_monitoring: default
+        /autoware/system/emergency_stop_operation: default
+        # /autoware/system/debug_data_logger: { sf_at: "warn", lf_at: "none", spf_at: "none" }
+        # /autoware/system/resource_monitoring: { sf_at: "warn", lf_at: "none", spf_at: "none" }
 
-            "/autoware/vehicle/node_alive_monitoring",
-            # "/autoware/vehicle/vehicle_errors",
-            # "/autoware/vehicle/control_command_topic_status",
-            # "/autoware/vehicle/vehicle_ecu_connection",
-            # "/autoware/vehicle/obstacle_crash",
-          ]
-        diag_level:
-          /autoware/localization/performance_monitoring/matching_score: { sf_at: "warn", lf_at: "none", spf_at: "none" }
-          /autoware/sensing/lidar/livox/health_monitoring: { sf_at: "warn", lf_at: "error", spf_at: "none" }
-          /autoware/system/debug_data_logger: { sf_at: "warn", lf_at: "none", spf_at: "none" }
-          /autoware/system/resource_monitoring: { sf_at: "warn", lf_at: "none", spf_at: "none" }
-        auto_recovery:
-          /autoware/vehicle/vehicle_errors: false
-          /autoware/vehicle/vehicle_ecu_connection: false
-          /autoware/vehicle/obstacle_crash: false
+        /autoware/vehicle/node_alive_monitoring: default
+        # /autoware/vehicle/vehicle_errors: { auto_recovery: "false" }
+        # /autoware/vehicle/control_command_topic_status: default
+        # /autoware/vehicle/vehicle_ecu_connection: { auto_recovery: "false" }
+        # /autoware/vehicle/obstacle_crash: { auto_recovery: "false" }
 
       external_control:
-        names:
-          [
-            "/autoware/control/control_command_gate/node_alive_monitoring",
-            "/autoware/control/external_control/external_command_selector/node_alive_monitoring",
+        /autoware/control/control_command_gate/node_alive_monitoring: default
+        /autoware/control/external_control/external_command_selector/node_alive_monitoring: default
 
-            "/autoware/system/node_alive_monitoring",
-            "/autoware/system/emergency_stop_operation",
+        /autoware/system/node_alive_monitoring: default
+        /autoware/system/emergency_stop_operation: default
 
-            "/autoware/vehicle/node_alive_monitoring",
-            "/autoware/vehicle/vehicle_errors",
-            "/autoware/vehicle/vehicle_ecu_connection",
-            "/autoware/vehicle/obstacle_crash",
-          ]
+        /autoware/vehicle/node_alive_monitoring: default
+        # /autoware/vehicle/vehicle_errors: default
+        # /autoware/vehicle/control_command_topic_status: default
+        # /autoware/vehicle/vehicle_ecu_connection: default
+        # /autoware/vehicle/obstacle_crash: default
