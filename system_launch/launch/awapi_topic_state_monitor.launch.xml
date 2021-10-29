@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <include file="$(find-pkg-share topic_state_monitor)/launch/topic_state_monitor.launch.xml">
+    <arg name="node_name_suffix" value="awapi_vehicle_get_status"/>
+    <arg name="topic" value="/awapi/vehicle/get/status"/>
+    <arg name="topic_type" value="autoware_api_msgs/msg/AwapiVehicleStatus"/>
+    <arg name="diag_name" value="system_topic_status"/>
+    <arg name="warn_rate" value="2.0"/>
+    <arg name="error_rate" value="0.5"/>
+    <arg name="timeout" value="2.0"/>
+  </include>
+
+  <include file="$(find-pkg-share topic_state_monitor)/launch/topic_state_monitor.launch.xml">
+    <arg name="node_name_suffix" value="awapi_autoware_get_status"/>
+    <arg name="topic" value="/awapi/autoware/get/status"/>
+    <arg name="topic_type" value="autoware_api_msgs/msg/AwapiAutowareStatus"/>
+    <arg name="diag_name" value="system_topic_status"/>
+    <arg name="warn_rate" value="2.0"/>
+    <arg name="error_rate" value="0.5"/>
+    <arg name="timeout" value="2.0"/>
+  </include>
+
+  <include file="$(find-pkg-share topic_state_monitor)/launch/topic_state_monitor.launch.xml">
+    <arg name="node_name_suffix" value="awapi_lane_change_get_status"/>
+    <arg name="topic" value="/awapi/lane_change/get/status"/>
+    <arg name="topic_type" value="autoware_api_msgs/msg/LaneChangeStatus"/>
+    <arg name="diag_name" value="system_topic_status"/>
+    <arg name="warn_rate" value="2.0"/>
+    <arg name="error_rate" value="0.5"/>
+    <arg name="timeout" value="2.0"/>
+  </include>
+
+  <include file="$(find-pkg-share topic_state_monitor)/launch/topic_state_monitor.launch.xml">
+    <arg name="node_name_suffix" value="awapi_object_avoidance_get_status"/>
+    <arg name="topic" value="/awapi/object_avoidance/get/status"/>
+    <arg name="topic_type" value="autoware_api_msgs/msg/ObstacleAvoidanceStatus"/>
+    <arg name="diag_name" value="system_topic_status"/>
+    <arg name="warn_rate" value="2.0"/>
+    <arg name="error_rate" value="0.5"/>
+    <arg name="timeout" value="2.0"/>
+  </include>
+
+  <include file="$(find-pkg-share topic_state_monitor)/launch/topic_state_monitor.launch.xml">
+    <arg name="node_name_suffix" value="awapi_prediction_get_objects"/>
+    <arg name="topic" value="/awapi/prediction/get/objects"/>
+    <arg name="topic_type" value="autoware_perception_msgs/msg/DynamicObjectArray"/>
+    <arg name="diag_name" value="system_topic_status"/>
+    <arg name="warn_rate" value="2.0"/>
+    <arg name="error_rate" value="0.5"/>
+    <arg name="timeout" value="2.0"/>
+  </include>
+
+  <include file="$(find-pkg-share topic_state_monitor)/launch/topic_state_monitor.launch.xml">
+    <arg name="node_name_suffix" value="awapi_vehicle_get_door"/>
+    <arg name="topic" value="/awapi/vehicle/get/door"/>
+    <arg name="topic_type" value="autoware_api_msgs/msg/DoorStatus"/>
+    <arg name="diag_name" value="system_topic_status"/>
+    <arg name="warn_rate" value="2.0"/>
+    <arg name="error_rate" value="0.5"/>
+    <arg name="timeout" value="2.0"/>
+  </include>
+
+  <include file="$(find-pkg-share topic_state_monitor)/launch/topic_state_monitor.launch.xml">
+    <arg name="node_name_suffix" value="awapi_autoware_get_stop_speed_exceeded"/>
+    <arg name="topic" value="/awapi/autoware/get/stop_speed_exceeded"/>
+    <arg name="topic_type" value="autoware_planning_msgs/msg/StopSpeedExceeded"/>
+    <arg name="diag_name" value="system_topic_status"/>
+    <arg name="warn_rate" value="2.0"/>
+    <arg name="error_rate" value="0.5"/>
+    <arg name="timeout" value="2.0"/>
+  </include>
+</launch>
