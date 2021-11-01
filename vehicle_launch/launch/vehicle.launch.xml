@@ -3,10 +3,10 @@
   <arg name="vehicle_model" description="vehicle model name"/>
   <arg name="sensor_model" description="sensor model name"/>
   <arg name="vehicle_id" default="$(env VEHICLE_ID default)" description="vehicle specific ID"/>
-
-  <arg name="vehicle_model_pkg" default="$(find-pkg-share $(var vehicle_model)_description)" description="path to the directory of vehicle model package"/>
-
   <arg name="simulation" default="false" description="use simulation"/>
+  <arg name="initial_engage_state" default="true" description="/vehicle/engage state after starting Autoware"/>
+
+  <let name="vehicle_model_pkg" value="$(find-pkg-share $(var vehicle_model)_description)"/>
 
   <let name="is_not_ymc_golfcart_m0" value="$(eval &quot;'$(var vehicle_model)'!='ymc_golfcart_m0'&quot;)" />
 
@@ -22,8 +22,9 @@
   <!-- vehicle interface -->
   <group unless="$(var simulation)">
     <include file="$(find-pkg-share g30esli_interface)/launch/g30esli_interface.launch.xml">
-      <arg name="g30esli_interface_param_file" value="$(find-pkg-share individual_params)/config/$(var vehicle_id)/aip_x1/g30esli_interface.param.yaml" />
+      <arg name="vehicle_id" value="$(var vehicle_id)"/>
       <arg name="initial_engage_state" value="$(var initial_engage_state)"/>
+      <arg name="g30esli_interface_param_file" value="$(find-pkg-share individual_params)/config/$(var vehicle_id)/aip_x1/g30esli_interface.param.yaml" />
       <arg name="use_disengage_override" value="$(var is_not_ymc_golfcart_m0)" />
       <arg name="use_vehicle_key_override" value="$(var is_not_ymc_golfcart_m0)" />
       <arg name="use_accel_pedal_override" value="$(var is_not_ymc_golfcart_m0)" />
