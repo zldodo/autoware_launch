@@ -4,10 +4,11 @@
   <arg name="sensor_model" description="sensor model name"/>
   <arg name="vehicle_id" default="$(env VEHICLE_ID default)" description="vehicle specific ID"/>
   <arg name="simulation" default="false" description="use simulation"/>
-  <arg name="initial_engage_state" default="false" description="/vehicle/engage state after starting Autoware"/>
+  <arg name="initial_engage_state" default="true" description="/vehicle/engage state after starting Autoware"/>
 
   <let name="vehicle_model_pkg" value="$(find-pkg-share $(var vehicle_model)_description)"/>
 
+  <let name="is_not_ymc_golfcart_m0" value="$(eval &quot;'$(var vehicle_model)'!='ymc_golfcart_m0'&quot;)" />
 
   <!-- vehicle description -->
   <group>
@@ -20,9 +21,19 @@
 
   <!-- vehicle interface -->
   <group unless="$(var simulation)">
-    <include file="$(var vehicle_model_pkg)/launch/vehicle_interface.launch.xml">
+    <include file="$(find-pkg-share g30esli_interface)/launch/g30esli_interface.launch.xml">
       <arg name="vehicle_id" value="$(var vehicle_id)"/>
       <arg name="initial_engage_state" value="$(var initial_engage_state)"/>
+      <arg name="g30esli_interface_param_file" value="$(find-pkg-share individual_params)/config/$(var vehicle_id)/aip_x1/g30esli_interface.param.yaml" />
+      <arg name="use_disengage_override" value="$(var is_not_ymc_golfcart_m0)" />
+      <arg name="use_vehicle_key_override" value="$(var is_not_ymc_golfcart_m0)" />
+      <arg name="use_accel_pedal_override" value="$(var is_not_ymc_golfcart_m0)" />
+      <arg name="use_brake_pedal_override" value="$(var is_not_ymc_golfcart_m0)" />
+      <arg name="use_steer_torque_override" value="false" />
+      <arg name="use_support_low_speed_engage" value="true" />
+    </include>
+    <include file="$(find-pkg-share g30esli_interface_awiv_adapter)/launch/g30esli_interface_awiv_adapter.launch.xml">
+      <arg name="g30esli_interface_awiv_adapter_param_file" value="$(find-pkg-share individual_params)/config/$(var vehicle_id)/aip_x1/g30esli_interface_awiv_adapter.param.yaml" />
     </include>
   </group>
 </launch>

@@ -155,7 +155,7 @@ def generate_launch_description():
         parameters=[
             obstacle_stop_planner_param,
             obstacle_stop_planner_acc_param,
-            {'enable_slow_down': False}
+            {'enable_slow_down': True}
         ],
         extra_arguments=[
             {'use_intra_process_comms': LaunchConfiguration('use_intra_process')}
