@@ -62,7 +62,7 @@ def launch_setup(context, *args, **kwargs):
         remappings=[
             ("~/input/reference_trajectory", "/planning/scenario_planning/trajectory"),
             ("~/input/current_velocity", "/localization/kinematic_state"),
-            ("~/input/current_steering", "/vehicle/status/steering"),
+            ("~/input/current_steering", "/vehicle/status/steering_status"),
             ("~/output/control_raw", "lateral/control_cmd"),
             ("~/output/predicted_trajectory", "predicted_trajectory"),
         ],
@@ -162,7 +162,7 @@ def launch_setup(context, *args, **kwargs):
         name="vehicle_cmd_gate",
         remappings=[
             ("input/emergency_state", "/system/emergency/emergency_state"),
-            ("input/steering", "/vehicle/status/steering"),
+            ("input/steering", "/vehicle/status/steering_status"),
             ("input/auto/control_cmd", "trajectory_follower/control_cmd"),
             ("input/auto/turn_signal_cmd", "/planning/turn_signal_decider/turn_signal_cmd"),
             ("input/auto/shift_cmd", "/control/shift_decider/shift_cmd"),
