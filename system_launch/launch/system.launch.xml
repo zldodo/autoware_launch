@@ -2,6 +2,7 @@
 <launch>
   <arg name="run_mode" default="online" description="options: online, planning_simulation"/>
   <arg name="sensor_model" description="sensor model name"/>
+  <arg name="vehicle_id" default="$(env VEHICLE_ID default)" />
 
   <let name="sensor_launch_pkg" value="$(find-pkg-share $(var sensor_model)_launch)"/>
 
@@ -15,7 +16,7 @@
         <arg name="cpu_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/cpu_monitor.param.yaml"/>
         <arg name="hdd_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/hdd_monitor.param.yaml"/>
         <arg name="mem_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/mem_monitor.param.yaml"/>
-        <arg name="net_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/net_monitor.param.yaml"/>
+        <arg name="net_monitor_config_file" value="$(find-pkg-share individual_params)/config/$(var vehicle_id)/net_monitor.param.yaml"/>
         <arg name="ntp_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/ntp_monitor.param.yaml"/>
         <arg name="process_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/process_monitor.param.yaml"/>
         <arg name="gpu_monitor_config_file" value="$(find-pkg-share system_launch)/config/system_monitor/gpu_monitor.param.yaml"/>
@@ -27,22 +28,36 @@
     <let name="config_file" value="$(find-pkg-share autoware_state_monitor)/config/autoware_state_monitor.planning_simulation.param.yaml" if="$(eval &quot;'$(var run_mode)'=='planning_simulation'&quot;)"/>
     <include file="$(find-pkg-share autoware_state_monitor)/launch/autoware_state_monitor.launch.xml">
       <arg name="config_file" value="$(var config_file)" />
+      <arg name="th_arrived_distance_m" value="0.5" />
     </include>
 
     <!-- Error Monitor -->
-    <let name="config_file" value="$(find-pkg-share autoware_error_monitor)/config/autoware_error_monitor.param.yaml" if="$(eval &quot;'$(var run_mode)'=='online'&quot;)"/>
-    <let name="config_file" value="$(find-pkg-share autoware_error_monitor)/config/autoware_error_monitor.planning_simulation.param.yaml" if="$(eval &quot;'$(var run_mode)'=='planning_simulation'&quot;)"/>
+    <let name="config_file" value="$(find-pkg-share system_launch)/config/autoware_error_monitor.param.yaml" if="$(eval &quot;'$(var run_mode)'=='online'&quot;)"/>
+    <let name="config_file" value="$(find-pkg-share system_launch)/config/autoware_error_monitor.planning_simulation.param.yaml" if="$(eval &quot;'$(var run_mode)'=='planning_simulation'&quot;)"/>
     <include file="$(find-pkg-share autoware_error_monitor)/launch/autoware_error_monitor.launch.xml">
       <arg name="config_file" value="$(var config_file)" />
       <arg name="extra_agg_config_file_sensing" value="$(var sensor_launch_pkg)/data/diagnostic_aggregator/sensor_kit.param.yaml" />
       <arg name="extra_agg_config_file_vehicle" value="$(find-pkg-share system_launch)/config/diagnostic_aggregator/vehicle.param.yaml" />
-      <arg name="use_emergency_hold" value="false" />
+      <arg name="use_emergency_hold" value="true" />
     </include>
 
     <!-- Emergency Handler -->
     <include file="$(find-pkg-share emergency_handler)/launch/emergency_handler.launch.xml">
-      <arg name="config_file" value="$(find-pkg-share emergency_handler)/config/emergency_handler.param.yaml" />
+      <arg name="config_file" value="$(find-pkg-share system_launch)/config/emergency_handler.param.yaml" />
     </include>
 
+    <!-- Bagkeeper -->
+    <include file="$(find-pkg-share bagkeeper)/launch/bagkeeper.launch.xml">
+      <arg name="keep_duration_before_trigger_in_sec" value="45" />
+      <arg name="keep_duration_after_trigger_in_sec" value="15" />
+      <arg name="input_directory" value="/media/autoware/LOG" />
+      <arg name="output_directory" value="/media/autoware/ROSBAG" />
+      <arg name="must_be_mountpoint" value="/media/autoware/ROSBAG" />
+    </include>
+
+    <!-- Topic State Monitor -->
+    <include file="$(find-pkg-share system_launch)/launch/awapi_topic_state_monitor.launch.xml" />
+    <include file="$(find-pkg-share system_launch)/launch/control_topic_state_monitor.launch.xml" />
+    <include file="$(find-pkg-share system_launch)/launch/planning_topic_state_monitor.launch.xml" />
   </group>
 </launch>
