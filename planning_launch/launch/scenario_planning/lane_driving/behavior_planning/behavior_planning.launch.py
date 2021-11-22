@@ -211,8 +211,12 @@ def generate_launch_description():
         intersection_param = yaml.safe_load(f)["/**"]["ros__parameters"]
 
     stop_line_param_path = os.path.join(
-        get_package_share_directory("behavior_velocity_planner"),
+        get_package_share_directory("planning_launch"),
         "config",
+        "scenario_planning",
+        "lane_driving",
+        "behavior_planning",
+        "behavior_velocity_planner",
         "stop_line.param.yaml",
     )
     with open(stop_line_param_path, "r") as f:
@@ -288,7 +292,7 @@ def generate_launch_description():
                 "launch_blind_spot": True,
                 "launch_detection_area": True,
                 "launch_virtual_traffic_light": True,
-                "launch_occlusion_spot": True,
+                "launch_occlusion_spot": False,
                 "launch_no_stopping_area": True,
                 "forward_path_length": 1000.0,
                 "backward_path_length": 5.0,

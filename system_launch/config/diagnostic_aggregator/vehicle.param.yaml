@@ -9,3 +9,31 @@
           path: vehicle_errors
           contains: [": vehicle_errors"]
           timeout: 1.0
+
+        control_command_topic_status:
+          type: diagnostic_aggregator/GenericAnalyzer
+          path: control_command_topic_status
+          contains: [": control_command_topic_status"]
+          timeout: 1.0
+
+        vehicle_ecu_connection:
+          type: diagnostic_aggregator/AnalyzerGroup
+          path: vehicle_ecu_connection
+          analyzers:
+            can_bus_connection:
+              type: diagnostic_aggregator/GenericAnalyzer
+              path: can_bus_connection
+              contains: [": can_bus_connection"]
+              timeout: 1.0
+
+            ros2_socketcan_connection:
+              type: diagnostic_aggregator/GenericAnalyzer
+              path: ros2_socketcan_connection
+              contains: [": socket_can_"]
+              timeout: 1.0
+
+        obstacle_crash:
+          type: diagnostic_aggregator/GenericAnalyzer
+          path: obstacle_crash
+          contains: [": obstacle_crash"]
+          timeout: 1.0
