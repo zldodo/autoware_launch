@@ -129,7 +129,7 @@ def generate_launch_description():
             ("~/input/route", LaunchConfiguration("input_route_topic_name")),
             ("~/input/vector_map", LaunchConfiguration("map_topic_name")),
             ("~/input/perception", "/perception/object_recognition/objects"),
-            ("~/input/velocity", "/localization/twist"),
+            ("~/input/odometry", "/localization/kinematic_state"),
             (
                 "~/input/external_approval",
                 "/planning/scenario_planning/lane_driving/behavior_planning/"
@@ -156,7 +156,8 @@ def generate_launch_description():
                 "/planning/scenario_planning/lane_driving/behavior_planning/"
                 "behavior_path_planner/force_available",
             ),
-            ("~/output/turn_signal_cmd", "/planning/turn_signal_decider/turn_signal_cmd"),
+            ("~/output/turn_indicators_cmd", "/planning/turn_indicators_cmd"),
+            ("~/output/hazard_lights_cmd", "/planning/hazard_lights_cmd"),
         ],
         parameters=[
             side_shift_param,
@@ -262,7 +263,7 @@ def generate_launch_description():
         remappings=[
             ("~/input/path_with_lane_id", "path_with_lane_id"),
             ("~/input/vector_map", "/map/vector_map"),
-            ("~/input/vehicle_velocity", "/localization/twist"),
+            ("~/input/vehicle_odometry", "/localization/kinematic_state"),
             ("~/input/dynamic_objects", "/perception/object_recognition/objects"),
             ("~/input/no_ground_pointcloud", "/sensing/lidar/no_ground/pointcloud"),
             (
