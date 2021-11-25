@@ -25,14 +25,8 @@
       <!-- </group> -->
 
       <!-- longitudinal controller -->
-<<<<<<< HEAD
-      <include file="$(find-pkg-share velocity_controller)/launch/velocity_controller.launch.xml">
-        <arg name="velocity_controller_param_path" value="$(var velocity_controller_param_path)"/>
-        <arg name="enable_smooth_stop" value="false" />
-=======
       <include file="$(find-pkg-share trajectory_follower_nodes)/launch/longitudinal_controller.launch.xml">
         <arg name="lon_controller_param_path" value="$(var lon_controller_param_path)"/>
->>>>>>> upstream/use-autoware-auto-msgs
       </include>
 
       <!-- latlon coupler -->
@@ -55,7 +49,7 @@
     <!-- vehicle cmd gate -->
     <include file="$(find-pkg-share vehicle_cmd_gate)/launch/vehicle_cmd_gate.launch.xml">
       <arg name="config_file" value="$(var vehicle_cmd_gate_param_path)"/>
-      <arg name="use_emergency_handling" value="true"/>
+      <arg name="use_emergency_handling" value="false"/>
       <arg name="use_external_emergency_stop" value="true"/>
     </include>
 
