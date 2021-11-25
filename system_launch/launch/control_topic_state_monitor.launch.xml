@@ -3,8 +3,8 @@
   <!-- shift_decider -->
   <include file="$(find-pkg-share topic_state_monitor)/launch/topic_state_monitor.launch.xml">
     <arg name="node_name_suffix" value="control_shift_decider_shift_cmd"/>
-    <arg name="topic" value="/control/shift_decider/shift_cmd"/>
-    <arg name="topic_type" value="autoware_vehicle_msgs/msg/ShiftStamped"/>
+    <arg name="topic" value="/control/shift_decider/gear_cmd"/>
+    <arg name="topic_type" value="autoware_auto_vehicle_msgs/msg/GearCommand"/>
     <arg name="diag_name" value="control_topic_status"/>
     <arg name="warn_rate" value="5.0"/>
     <arg name="error_rate" value="1.0"/>
