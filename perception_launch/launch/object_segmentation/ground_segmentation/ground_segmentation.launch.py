@@ -280,7 +280,15 @@ def launch_setup(context, *args, **kwargs):
             ("input", "measurement_range_cropped/pointcloud"),
             ("output", "no_ground/pointcloud"),
         ],
-        parameters=[ground_segmentation_param["common_ground_filter"]["parameters"]],
+        parameters=[
+            {
+                "min_x": vehicle_info["min_longitudinal_offset"],
+                "max_x": vehicle_info["max_longitudinal_offset"],
+                "min_y": vehicle_info["min_lateral_offset"],
+                "max_y": vehicle_info["max_lateral_offset"],
+            },
+            ground_segmentation_param["common_ground_filter"]["parameters"],
+        ],
         extra_arguments=[{"use_intra_process_comms": LaunchConfiguration("use_intra_process")}],
     )
 
