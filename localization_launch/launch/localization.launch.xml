@@ -3,6 +3,11 @@
   <!-- localization module -->
   <group>
     <push-ros-namespace namespace="localization"/>
+
+    <!-- autoware_auto_localization module -->
+    <include file="$(find-pkg-share localization_launch)/launch/autoware_auto_localization/autoware_auto_localization.launch.py">
+    </include>
+
     <!-- util module -->
     <group>
       <push-ros-namespace namespace="util"/>

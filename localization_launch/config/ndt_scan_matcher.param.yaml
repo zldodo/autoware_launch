@@ -24,11 +24,11 @@
     max_iterations: 30
 
     # Threshold for deciding whether to trust the estimation result
-    converged_param_transform_probability: 3.0
+    converged_param_transform_probability: 1.0
 
     # neighborhood search method in OMP
     # 0=KDTREE, 1=DIRECT26, 2=DIRECT7, 3=DIRECT1
-    omp_neighborhood_search_method: 0
+    omp_neighborhood_search_method: 3
 
     # Number of threads used for parallel computing
-    omp_num_threads: 4
+    omp_num_threads: 1
