@@ -86,6 +86,22 @@ def generate_launch_description():
         extra_arguments=[{"use_intra_process_comms": LaunchConfiguration("use_intra_process")}],
     )
 
+    """
+     * ndt_map_publisher
+    """
+    ndt_map_publisher = Node(
+        package='ndt_nodes',
+        executable='ndt_map_publisher_exe',
+        name='ndt_map_publisher_node',
+        parameters=[
+            LaunchConfiguration('ndt_map_publisher_yaml_path'),
+            {
+                "map_pcd_file": LaunchConfiguration("pointcloud_map_path") ,
+                "map_yaml_file": LaunchConfiguration("pointcloud_yaml_path"),
+            }
+        ],
+    )
+
     container = ComposableNodeContainer(
         name="map_container",
         namespace="",
@@ -117,6 +133,16 @@ def generate_launch_description():
                 "path to pointcloud map file",
             ),
             add_launch_arg(
+                "pointcloud_yaml_path",
+                [LaunchConfiguration("map_path"), "/pointcloud_map.yaml"],
+                "path to pointcloud yaml file",
+            ),
+            add_launch_arg(
+                "ndt_map_publisher_yaml_path",
+                [LaunchConfiguration("map_path"), "/ndt_map_publisher.yaml"],
+                "path to ndt map publisher yaml file",
+            ),
+            add_launch_arg(
                 "use_intra_process", "false", "use ROS2 component container communication"
             ),
             add_launch_arg("use_multithread", "false", "use multithread"),
@@ -135,6 +161,7 @@ def generate_launch_description():
                     PushRosNamespace("map"),
                     container,
                     map_hash_generator,
+                    ndt_map_publisher,
                 ]
             ),
         ]

@@ -23,34 +23,6 @@ import os
 
 def generate_launch_description():
 
-    """
-     * ndt_map_publisher
-    """
-
-
-    ndt_map_publisher_param = {
-        'map_pcd_file': "/home/yamato/data/kashiwanoha/pointcloud_map.pcd",
-        'map_yaml_file': "/home/yamato/data/kashiwanoha/pointcloud_map.yaml",
-        'map_frame': 'map',
-        'map_config.capacity': 2500000,
-        'map_config.min_point.x': 3500.0,
-        'map_config.min_point.y': 73000.0,
-        'map_config.min_point.z': -100.0,
-        'map_config.max_point.x': 4000.0,
-        'map_config.max_point.y': 74000.0,
-        'map_config.max_point.z': 100.0,
-        'map_config.voxel_size.x': 2.0,
-        'map_config.voxel_size.y': 2.0,
-        'map_config.voxel_size.z': 2.0,
-        'viz_map': True
-    }
-
-    ndt_map_publisher = Node(
-        package='ndt_nodes',
-        executable='ndt_map_publisher_exe',
-        name='ndt_map_publisher_node',
-        parameters=[ndt_map_publisher_param]
-    )
 
 
     """
@@ -75,6 +47,7 @@ def generate_launch_description():
         name='p2d_ndt_localizer_node',
         parameters=[LaunchConfiguration('ndt_localizer_param_file')],
         remappings=[
+            ("ndt_map", "/map/ndt_map"),
             ("points_in", "/localization/util/downsample/pointcloud"),
             ("ndt_pose", "/localization/pose_estimator/pose_with_covariance"),
             # ("ndt_pose", "/localization/pose_estimator/pose_with_covariance_dummy"),
@@ -83,7 +56,6 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        ndt_map_publisher,
         ndt_localizer_param,
         ndt_localizer,
     ])
