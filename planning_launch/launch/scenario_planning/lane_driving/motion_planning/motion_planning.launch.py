@@ -63,8 +63,6 @@ def generate_launch_description():
         ],
         parameters=[
             obstacle_avoidance_planner_param,
-            {"is_showing_debug_info": False},
-            {"is_stopping_if_outside_drivable_area": True},
         ],
         extra_arguments=[{"use_intra_process_comms": LaunchConfiguration("use_intra_process")}],
     )
