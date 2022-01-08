@@ -92,7 +92,8 @@
         l_inf_norm: true
         two_step_soft_constraint: false
         plan_from_ego: false
-        avoiding_constraint_type: 0  # 0.soft 1.hard 2.soft + hard
+        soft_constraint: true
+        hard_constraint: false
         is_hard_fixing_terminal_point: false # hard fixing terminal point
 
       common:
@@ -133,7 +134,6 @@
         obstacle_avoid_yaw_error_weight: 100.0 # weight for yaw error
         obstacle_avoid_steer_input_weight: 10000.0 # weight for yaw error
         near_objects_length: 30.0 # weight for yaw error
-
 
         terminal_lat_error_weight: 0.0 # weight for lateral error at terminal point
         terminal_yaw_error_weight: 100.0 # weight for yaw error at terminal point
