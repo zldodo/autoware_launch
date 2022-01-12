@@ -128,8 +128,8 @@
         yaw_error_weight: 0.0 # weight for yaw error
         yaw_error_rate_weight: 0.0 # weight for yaw error rate
         steer_input_weight: 0.0 # 1000.0 # weight for steering input
-        steer_rate_weight: 0.0 # weight for steering rate
-        steer_acc_weight: 10.0 #100.0 # weight for steering acceleration
+        steer_rate_weight: 0.0 # 10000.0 # 0.0 # weight for steering rate
+        steer_acc_weight: 0.0 #100.0 # weight for steering acceleration
 
         obstacle_avoid_lat_error_weight: 3.0 # weight for lateral error
         obstacle_avoid_yaw_error_weight: 100.0 # weight for yaw error
