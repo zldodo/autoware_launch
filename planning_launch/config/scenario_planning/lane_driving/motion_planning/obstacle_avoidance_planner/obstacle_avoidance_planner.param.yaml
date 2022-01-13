@@ -2,19 +2,19 @@
   ros__parameters:
     option:
       # publish
-      is_publishing_clearance_map: true # publish clearance map as nav_msgs::OccupancyGrid
+      is_publishing_debug_visualization_marker: true
+      is_publishing_clearance_map: false # true # publish clearance map as nav_msgs::OccupancyGrid
       is_publishing_object_clearance_map: false #true # publish clearance map as nav_msgs::OccupancyGrid
       is_publishing_area_with_objects: false #true # publish occupancy map as nav_msgs::OccupancyGrid
 
       # show
       is_showing_debug_info: false
-      is_showing_calculation_time: false
+      is_showing_calculation_time: true
 
       # other
-      is_stopping_if_outside_drivable_area: true
       is_using_vehicle_config: true # use vehicle config
       enable_avoidance: true # enable avoidance function
-      enable_pre_smoothing: true
+      enable_pre_smoothing: true # false # true
       visualize_sampling_num: 1
 
     common:
@@ -55,7 +55,6 @@
 
       common:
         num_joint_buffer_points: 3 # number of joint buffer points
-        num_joint_buffer_points_for_extending: 6 # number of joint buffer points for extending
         num_offset_for_begin_idx: 2 # number of shifting points for beginning non-fix idx
         delta_arc_length_for_optimization: 1.0 # delta arc length when optimizing[m]
 
@@ -64,11 +63,7 @@
         clearance_for_straight_line: 0.05 # minimum optimizing range around straight points
         clearance_for_joint: 0.1 # minimum optimizing range around joint points
         range_for_extend_joint: 0.1 # minimum optimizing range around joint points for extending
-        clearance_for_only_smoothing: 0.0 # minimum optimizing range when applying only smoothing
-        clearance_from_object_for_straight: 10.0 # minimum clearance from object when judging straight line
-        clearance_from_road: 0.1 # clearance from road boundary[m]
-        clearance_from_object: 1.8 # clearance from object[m]
-        min_object_clearance_for_joint: 3.2 # minimum clearance from object[m] when judging is_including_only_smooth_range
+        clearance_for_only_smoothing: 0.1 # minimum optimizing range when applying only smoothing
 
       constrain:
         max_x_constrain_search_range: 0.0 # maximum x search range in local coordinate
@@ -82,21 +77,18 @@
         max_iteration: 10000 # max iteration when solving QP
         eps_abs: 1.0e-8 # eps abs when solving OSQP
         eps_rel: 1.0e-11 # eps rel when solving OSQP
-        eps_abs_for_extending: 1.0e-8 # eps abs when solving OSQP for extending
-        eps_rel_for_extending: 1.0e-9 # eps rel when solving OSQP for extending
-        eps_abs_for_visualizing: 1.0e-6 # eps abs when solving OSQP for visualizing
-        eps_rel_for_visualizing: 1.0e-8 # eps rel when solving OSQP for visualizing
 
     # mpt param
     mpt:
       option:
         l_inf_norm: true
         two_step_soft_constraint: false
-        plan_from_ego: false
         soft_constraint: true
         hard_constraint: false
         is_hard_fixing_terminal_point: false # hard fixing terminal point
         steer_limit_constraint: true
+        fix_points_around_ego: true
+        plan_from_ego: false
 
       common:
         num_curvature_sampling_points: 5 # number of sampling points when calculating curvature
@@ -128,8 +120,8 @@
         lat_error_weight: 100.0 # weight for lateral error
         yaw_error_weight: 0.0 # weight for yaw error
         yaw_error_rate_weight: 0.0 # weight for yaw error rate
-        steer_input_weight: 0.0 # 1000.0 # weight for steering input
-        steer_rate_weight: 0.0 # 10000.0 # 0.0 # weight for steering rate
+        steer_input_weight: 10.0 # 0.0 # 1000.0 # weight for steering input
+        steer_rate_weight: 10.0 # 0.0 # 10000.0 # 0.0 # weight for steering rate
         steer_acc_weight: 0.0 #100.0 # weight for steering acceleration
 
         obstacle_avoid_lat_error_weight: 3.0 # weight for lateral error
