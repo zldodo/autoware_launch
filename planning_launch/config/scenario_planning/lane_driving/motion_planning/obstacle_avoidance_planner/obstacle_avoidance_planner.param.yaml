@@ -90,6 +90,7 @@
         fix_points_around_ego: true
         plan_from_ego: false
         enable_warm_start: false
+        enable_manual_warm_start: true
 
       common:
         num_curvature_sampling_points: 5 # number of sampling points when calculating curvature
