@@ -76,8 +76,8 @@
 
       qp:
         max_iteration: 10000 # max iteration when solving QP
-        eps_abs: 1.0e-8 # eps abs when solving OSQP
-        eps_rel: 1.0e-11 # eps rel when solving OSQP
+        eps_abs: 1.0e-3 # 1.0e-8 # eps abs when solving OSQP
+        eps_rel: 1.0e-3 # 1.0e-11 # eps rel when solving OSQP
 
     # mpt param
     mpt:
@@ -86,10 +86,10 @@
         two_step_soft_constraint: false
         soft_constraint: true
         hard_constraint: false
-        is_hard_fixing_terminal_point: false # hard fixing terminal point
         steer_limit_constraint: true
         fix_points_around_ego: true
         plan_from_ego: false
+        enable_warm_start: false
 
       common:
         num_curvature_sampling_points: 5 # number of sampling points when calculating curvature
@@ -100,7 +100,6 @@
 
       kinematics:
         max_steer_deg: 40.0 # max steering angle [deg]
-        steer_tau: 0.1 # steering dynamics time constant (1d approximation) [s]
 
         # no problem not to be set these parameters
         optimization_center_offset: 2.3 # 0.0 # 1.37 # TODO try 0.0
