@@ -14,9 +14,11 @@
       # other
       is_using_vehicle_config: true # use vehicle config
       enable_avoidance: true # enable avoidance function
-      enable_pre_smoothing: true # false # true
+      enable_pre_smoothing: false # true # false # true
       skip_optimization: false
       visualize_sampling_num: 1
+      reset_prev_info: false
+      use_footprint_for_drivability: false
 
     common:
       # sampling
@@ -26,14 +28,14 @@
       trajectory_length: 300.0 # total trajectory length[m]
       forward_fixing_distance: 10.0 # forward fixing length from base_link[m]
       backward_fixing_distance: 3.0 # backward fixing length from base_link[m]
-      delta_arc_length_for_trajectory: 0.1 # delta arc length for trajectory[m]
+      delta_arc_length_for_trajectory: 0.5 # delta arc length for trajectory[m]
 
       delta_dist_threshold_for_closest_point: 3.0 # delta dist thres for closest point[m]
       delta_yaw_threshold_for_closest_point: 1.046 #M_PI/3.0, delta yaw thres for closest point
       delta_yaw_threshold_for_straight: 0.02 # delta dist thres for straight point
 
       num_fix_points_for_extending: 50 # number of fixing points when extending
-      max_dist_for_extending_end_point: 5.0 # minimum delta dist thres for extending last point[m]
+      max_dist_for_extending_end_point: 0.0001 # minimum delta dist thres for extending last point[m]
 
     object:  # avoiding object
       max_avoiding_objects_velocity_ms: 0.5 # maximum velocity for avoiding objects[m/s]
@@ -51,33 +53,20 @@
         animal: true
 
     eb:
-      option:
-        is_getting_constraints_close2path_points: true # generate trajectory closer to path points
-
       common:
         num_joint_buffer_points: 3 # number of joint buffer points
-        num_offset_for_begin_idx: 2 # number of shifting points for beginning non-fix idx
-        delta_arc_length_for_optimization: 1.0 # delta arc length when optimizing[m]
+        num_offset_for_begin_idx: 2 # number of shifting points for beginning non-fix idxp
+        delta_arc_length_for_optimization: 0.5 # delta arc length when optimizing[m]
 
-      # clearance for unique points
       clearance:
         clearance_for_straight_line: 0.05 # minimum optimizing range around straight points
         clearance_for_joint: 0.1 # minimum optimizing range around joint points
-        range_for_extend_joint: 0.1 # minimum optimizing range around joint points for extending
         clearance_for_only_smoothing: 0.1 # minimum optimizing range when applying only smoothing
-
-      constrain:
-        max_x_constrain_search_range: 0.0 # maximum x search range in local coordinate
-        coef_x_constrain_search_resolution: 1.0 # coef for fine sampling when exploring x direction
-        coef_y_constrain_search_resolution: 0.5 # coef for fine sampling when exploring y direction
-        keep_space_shape_x: 0.2 # keep space for x direction from base_link[m]
-        keep_space_shape_y: 0.1 # replaced with /vehicle_info/vehicle_width when is_using_vehicle_config is true, keep space for y direction from base_link[m]
-        max_lon_space_for_driveable_constraint: 0.5 # maximum lon(x) space when optimizing point[m]
 
       qp:
         max_iteration: 10000 # max iteration when solving QP
-        eps_abs: 1.0e-3 # 1.0e-8 # eps abs when solving OSQP
-        eps_rel: 1.0e-3 # 1.0e-11 # eps rel when solving OSQP
+        eps_abs: 1.0e-4 # 1.0e-8 # eps abs when solving OSQP
+        eps_rel: 1.0e-7 # 1.0e-11 # eps rel when solving OSQP
 
     # mpt param
     mpt:
@@ -109,7 +98,7 @@
 
       clearance:  # clearance(distance) between vehicle and roads/objects when generating trajectory
         hard_clearance_from_road: 0.0 # clearance from road boundary[m]
-        soft_clearance_from_road: 0.1 # clearance from road boundary[m]
+        soft_clearance_from_road: 0.2 # 0.2 # clearance from road boundary[m]
         soft_second_clearance_from_road: 1.0 # clearance from road boundary[m]
         clearance_from_object: 1.8 # clearance from object[m]
         extra_desired_clearance_from_road: 0.0 # extra desired clearance from road
@@ -130,15 +119,13 @@
         obstacle_avoid_steer_input_weight: 10000.0 # weight for yaw error
         near_objects_length: 30.0 # weight for yaw error
 
-        terminal_lat_error_weight: 0.0 # weight for lateral error at terminal point
+        terminal_lat_error_weight: 100.0 # weight for lateral error at terminal point
         terminal_yaw_error_weight: 100.0 # weight for yaw error at terminal point
         terminal_path_lat_error_weight: 1000.0 # weight for lateral error at path end point
         terminal_path_yaw_error_weight: 1000.0 # weight for yaw error at path end point
 
     # replanning & trimming trajectory param outside algorithm
     replan:
-      reset_prev_info: false
-      use_footprint_for_drivability: true
       min_ego_moving_dist_for_replan: 10.0 # minimum ego moving dist thres for replan [m]
       min_delta_time_sec_for_replan: 1.0 # minimum delta time for replan [second]
       distance_for_path_shape_change_detection: 2.0 # minimum delta dist thres for detecting path shape change
