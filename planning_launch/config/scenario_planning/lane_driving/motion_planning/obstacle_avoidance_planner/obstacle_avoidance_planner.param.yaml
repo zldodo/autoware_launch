@@ -14,7 +14,7 @@
       # other
       is_using_vehicle_config: true # use vehicle config
       enable_avoidance: true # enable avoidance function
-      enable_pre_smoothing: false # true # false # true
+      enable_pre_smoothing: true # false # true
       skip_optimization: false
       visualize_sampling_num: 1
       reset_prev_info: false
@@ -65,8 +65,8 @@
 
       qp:
         max_iteration: 10000 # max iteration when solving QP
-        eps_abs: 1.0e-4 # 1.0e-8 # eps abs when solving OSQP
-        eps_rel: 1.0e-7 # 1.0e-11 # eps rel when solving OSQP
+        eps_abs: 1.0e-8 # 1.0e-4 # 1.0e-8 # eps abs when solving OSQP
+        eps_rel: 1.0e-11 # 1.0e-7 # 1.0e-11 # eps rel when solving OSQP
 
     # mpt param
     mpt:
@@ -85,7 +85,7 @@
         num_curvature_sampling_points: 5 # number of sampling points when calculating curvature
 
         delta_arc_length_for_mpt_points: 0.5 # delta arc length when generating mpt [m]
-        forward_fixing_mpt_min_distance: 10.0 # number of fixing points around ego vehicle
+        forward_fixing_mpt_min_distance: 5.0 # number of fixing points around ego vehicle
         forward_fixing_mpt_time: 2.5 # forward fixing time with current velocity [s]
 
       kinematics:
