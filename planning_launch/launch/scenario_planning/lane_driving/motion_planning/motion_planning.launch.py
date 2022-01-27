@@ -23,6 +23,7 @@ from launch.conditions import UnlessCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.actions import LoadComposableNodes
+from launch_ros.actions import Node
 from launch_ros.descriptions import ComposableNode
 import yaml
 
@@ -185,6 +186,31 @@ def generate_launch_description():
         ],
     )
 
+    frenet_planner_node_param_path = os.path.join(
+        get_package_share_directory("frenet_planner_node"),
+        "config",
+        "frenet_planner_node.yaml",
+    )
+    with open(frenet_planner_node_param_path, "r") as f:
+        frenet_planner_node_param = yaml.safe_load(f)["/**"]["ros__parameters"]
+
+    frenet_planner_node = Node(
+        package="frenet_planner_node",
+        executable='frenet_planner_node_exe',
+        name="frenet_planner_node",
+        namespace="",
+        remappings=[
+            ("~/output/trajectory", "/planning/scenario_planning/lane_driving/trajectory"),
+            ("~/input/objects", "/perception/object_recognition/objects"),
+            ("~/input/odometry", "/localization/kinematic_state"),
+            ("~/input/path", LaunchConfiguration("input_path_topic")),
+        ],
+        parameters=[
+            common_param,
+            # frenet_planner_node_param,
+        ],
+    )
+
     surround_obstacle_checker_loader = LoadComposableNodes(
         composable_node_descriptions=[surround_obstacle_checker_component],
         target_container=container,
@@ -219,8 +245,9 @@ def generate_launch_description():
             DeclareLaunchArgument("use_multithread", default_value="false"),
             set_container_executable,
             set_container_mt_executable,
-            container,
-            surround_obstacle_checker_loader,
-            relay_loader,
+            # container,
+            # surround_obstacle_checker_loader,
+            # relay_loader,
+            frenet_planner_node
         ]
     )
