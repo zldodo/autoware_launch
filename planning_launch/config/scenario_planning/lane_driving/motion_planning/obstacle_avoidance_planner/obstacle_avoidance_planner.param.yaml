@@ -6,6 +6,7 @@
       is_publishing_clearance_map: false # true # publish clearance map as nav_msgs::OccupancyGrid
       is_publishing_object_clearance_map: false #true # publish clearance map as nav_msgs::OccupancyGrid
       is_publishing_area_with_objects: false #true # publish occupancy map as nav_msgs::OccupancyGrid
+      is_stopping_if_outside_drivable_area: true
 
       # show
       is_showing_debug_info: false
