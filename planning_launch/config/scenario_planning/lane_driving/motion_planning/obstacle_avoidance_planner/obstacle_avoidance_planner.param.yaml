@@ -22,13 +22,14 @@
         # parameters only when use_vehicle_circles is true
         vehicle_circles:
           use_manual_vehicle_circles: false
+          num_for_constraints: 4
 
           # parameters only when use_manual_vehicle_circles is true
           longitudinal_offsets: [-0.15, 0.88, 1.9, 2.95] #avoiding_circle_offsets: [-0.14, 0.83, 1.8, 2.7] #[-0.15, 0.88, 1.9, 2.95]
           radius: 0.95
 
           # parameters only when use_manual_vehicle_circles is false
-          num: 4
+          num_for_radius: 4
           radius_ratio: 0.9
 
       # other
@@ -117,13 +118,14 @@
       collision_free_constraints:
         vehicle_circles:
           use_manual_vehicle_circles: false
+          num_for_constraints: 3
 
           # parameters only when use_manual_vehicle_circles is true
           longitudinal_offsets: [-0.15, 0.88, 1.9, 2.95] #avoiding_circle_offsets: [-0.14, 0.83, 1.8, 2.7] #[-0.15, 0.88, 1.9, 2.95]
           radius: 0.95
 
           # parameters only when use_manual_vehicle_circles is false
-          num: 4
+          num_for_radius: 4
           radius_ratio: 0.8
 
       clearance:  # clearance(distance) between vehicle and roads/objects when generating trajectory
@@ -156,6 +158,6 @@
 
     # replanning & trimming trajectory param outside algorithm
     replan:
-      min_ego_moving_dist_for_replan: 10.0 # minimum ego moving dist thres for replan [m]
+      min_ego_moving_dist_for_replan: 3.0 # minimum ego moving dist thres for replan [m]
       min_delta_time_sec_for_replan: 1.0 # minimum delta time for replan [second]
       distance_for_path_shape_change_detection: 2.0 # minimum delta dist thres for detecting path shape change
