@@ -77,8 +77,8 @@
       common:
         num_joint_buffer_points: 3 # number of joint buffer points
         num_offset_for_begin_idx: 2 # number of shifting points for beginning non-fix idxp
-        delta_arc_length_for_eb: 1.0 # 1.0 # delta arc length when optimizing[m]
-        num_sampling_points_for_eb: 60 # number of optimizing points # must be longer than mpt points
+        delta_arc_length_for_eb: 0.6 # 1.0 # delta arc length when optimizing[m] When the value is around 1.0, overshoot at the corner happens.
+        num_sampling_points_for_eb: 95 # number of optimizing points # must be longer than mpt points
 
       clearance:
         clearance_for_straight_line: 0.05 # minimum optimizing range around straight points
@@ -87,8 +87,8 @@
 
       qp:
         max_iteration: 10000 # max iteration when solving QP
-        eps_abs: 1.0e-8 # 1.0e-4 # 1.0e-8 # eps abs when solving OSQP
-        eps_rel: 1.0e-11 # 1.0e-7 # 1.0e-11 # eps rel when solving OSQP
+        eps_abs: 1.0e-8 # 1.0e-8 # 1.0e-4 # 1.0e-8 # eps abs when solving OSQP
+        eps_rel: 1.0e-10 # 1.0e-11 # 1.0e-7 # 1.0e-11 # eps rel when solving OSQP
 
     # mpt param
     mpt:
