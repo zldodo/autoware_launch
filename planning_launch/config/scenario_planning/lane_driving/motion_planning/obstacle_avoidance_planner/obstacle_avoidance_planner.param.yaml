@@ -11,7 +11,7 @@
 
       # show
       is_showing_debug_info: false
-      is_showing_calculation_time: true
+      is_showing_calculation_time: false
 
       # check if planned trajectory is outside drivable area
       drivability_check:
@@ -36,8 +36,7 @@
       enable_avoidance: false # true # enable avoidance function
       enable_pre_smoothing: true # false # true
       skip_optimization: false
-      visualize_sampling_num: 1
-      reset_prev_info: false
+      reset_prev_optimization: false
 
     common:
       # sampling
@@ -103,6 +102,7 @@
         plan_from_ego: false
         enable_warm_start: false
         enable_manual_warm_start: true
+        visualize_sampling_num: 1
 
       common:
         num_curvature_sampling_points: 5 # number of sampling points when calculating curvature
