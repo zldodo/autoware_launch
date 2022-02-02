@@ -189,7 +189,7 @@ def generate_launch_description():
     frenet_planner_node_param_path = os.path.join(
         get_package_share_directory("frenet_planner_node"),
         "config",
-        "frenet_planner_node.yaml",
+        "frenet_planner_node.config.yaml",
     )
     with open(frenet_planner_node_param_path, "r") as f:
         frenet_planner_node_param = yaml.safe_load(f)["/**"]["ros__parameters"]
