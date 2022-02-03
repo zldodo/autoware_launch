@@ -111,8 +111,8 @@
       kinematics:
         max_steer_deg: 40.0 # max steering angle [deg]
 
-        # By uncommenting this, we can designate optimization center for MPT
-        # optimization_center_offset: 2.3 # optimization center offset from base link
+        # By commenting this, we can run vehicle-centered optimization for MPT
+        optimization_center_offset: 2.3 # optimization center offset from base link
 
       # check if planned trajectory is outside drivable area
       collision_free_constraints:
