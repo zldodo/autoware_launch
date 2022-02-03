@@ -61,7 +61,6 @@
     object:  # avoiding object
       max_avoiding_objects_velocity_ms: 0.5 # maximum velocity for avoiding objects[m/s]
       max_avoiding_ego_velocity_ms: 6.0 # maximum ego velocity when avoiding objects[m/s]
-      center_line_width: 1.7 # replaced with /vehicle_info/vehicle_width when is_using_vehicle_config is true, center line width around path points used for judging that object is required to avoid or not
 
       avoiding_object_type:
         unknown: true
@@ -112,7 +111,8 @@
       kinematics:
         max_steer_deg: 40.0 # max steering angle [deg]
 
-        optimization_center_offset: 2.3 # optimization center offset from base link
+        # By uncommenting this, we can designate optimization center for MPT
+        # optimization_center_offset: 2.3 # optimization center offset from base link
 
       # check if planned trajectory is outside drivable area
       collision_free_constraints:
