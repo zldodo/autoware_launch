@@ -132,7 +132,7 @@
 
       clearance:  # clearance(distance) between vehicle and roads/objects when generating trajectory
         hard_clearance_from_road: 0.0 # clearance from road boundary[m]
-        soft_clearance_from_road: 0.1 # 0.2 # 0.2 # clearance from road boundary[m]
+        soft_clearance_from_road: 0.1 # clearance from road boundary[m]
         soft_second_clearance_from_road: 1.0 # clearance from road boundary[m]
         clearance_from_object: 1.8 # clearance from object[m]
         extra_desired_clearance_from_road: 0.0 # extra desired clearance from road
@@ -144,9 +144,9 @@
         lat_error_weight: 100.0 # weight for lateral error
         yaw_error_weight: 0.0 # weight for yaw error
         yaw_error_rate_weight: 0.0 # weight for yaw error rate
-        steer_input_weight: 10.0 # 0.0 # 1000.0 # weight for steering input
-        steer_rate_weight: 10.0 # 0.0 # 10000.0 # 0.0 # weight for steering rate
-        steer_acc_weight: 0.0 #100.0 # weight for steering acceleration
+        steer_input_weight: 10.0 # weight for steering input
+        steer_rate_weight: 10.0 # weight for steering rate
+        steer_acc_weight: 0.0 # weight for steering acceleration
 
         obstacle_avoid_lat_error_weight: 3.0 # weight for lateral error
         obstacle_avoid_yaw_error_weight: 100.0 # weight for yaw error
