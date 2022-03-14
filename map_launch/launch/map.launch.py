@@ -69,7 +69,9 @@ def generate_launch_description():
         name="pointcloud_map_loader",
         remappings=[("output/pointcloud_map", "pointcloud_map")],
         parameters=[
-            {"pcd_paths_or_directory": ["[", LaunchConfiguration("pointcloud_map_path"), "]"]}
+            {
+                "pointcloud_map_path": LaunchConfiguration("pointcloud_map_path"),
+            }
         ],
         extra_arguments=[{"use_intra_process_comms": LaunchConfiguration("use_intra_process")}],
     )
@@ -109,12 +111,12 @@ def generate_launch_description():
             add_launch_arg("map_path", "", "path to map directory"),
             add_launch_arg(
                 "lanelet2_map_path",
-                [LaunchConfiguration("map_path"), "/lanelet2_map.osm"],
+                "/lanelet2_map.osm",
                 "path to lanelet2 map file",
             ),
             add_launch_arg(
                 "pointcloud_map_path",
-                [LaunchConfiguration("map_path"), "/pointcloud_map.pcd"],
+                "/pointcloud_map.pcd",
                 "path to pointcloud map file",
             ),
             add_launch_arg(

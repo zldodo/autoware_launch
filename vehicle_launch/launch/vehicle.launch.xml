@@ -19,10 +19,10 @@
   </group>
 
   <!-- vehicle interface -->
-  <group unless="$(var simulation)">
+  <!-- <group unless="$(var simulation)">
     <include file="$(var vehicle_model_pkg)/launch/vehicle_interface.launch.xml">
       <arg name="vehicle_id" value="$(var vehicle_id)"/>
       <arg name="initial_engage_state" value="$(var initial_engage_state)"/>
     </include>
-  </group>
+  </group> -->
 </launch>

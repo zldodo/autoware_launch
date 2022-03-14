@@ -43,15 +43,15 @@
   </include>
 
   <!-- Planning -->
-  <include file="$(find-pkg-share planning_launch)/launch/planning.launch.xml">
-  </include>
+  <!-- <include file="$(find-pkg-share planning_launch)/launch/planning.launch.xml">
+  </include> -->
 
   <!-- Control -->
-  <include file="$(find-pkg-share control_launch)/launch/control.launch.py">
+  <!-- <include file="$(find-pkg-share control_launch)/launch/control.launch.py"> -->
     <!-- options for lateral_controller_mode: mpc_follower, pure_pursuit -->
-    <arg name="lateral_controller_mode" value="mpc_follower" />
+    <!-- <arg name="lateral_controller_mode" value="mpc_follower" />
     <arg name="lat_controller_param_path" value="$(find-pkg-share control_launch)/config/trajectory_follower/$(var lateral_controller_mode).param.yaml"/>
-  </include>
+  </include> -->
 
   <!-- Autoware API -->
   <include file="$(find-pkg-share autoware_api_launch)/launch/autoware_api.launch.xml">
@@ -63,7 +63,7 @@
   <node pkg="rviz2" exec="rviz2" name="rviz2" output="screen" args="-d $(var rviz_config) -s $(find-pkg-share autoware_launch)/rviz/image/autoware.png" if="$(var rviz)"/>
 
   <!-- Web Controller -->
-  <include file="$(find-pkg-share web_controller)/launch/web_controller.launch.xml" unless="$(var scenario_simulation)"/>
+  <!-- <include file="$(find-pkg-share web_controller)/launch/web_controller.launch.xml" unless="$(var scenario_simulation)"/> -->
 
   <!-- Simulator -->
   <include file="$(find-pkg-share simulator_launch)/launch/simulator.launch.xml">
